@@ -4,6 +4,8 @@ import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 
 const pathSrc = path.resolve(__dirname, 'src')
 // https://vite.dev/config/
@@ -11,14 +13,30 @@ export default defineConfig({
   plugins: [
     vue(),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
+        ElementPlusResolver(),
+        // 自动导入图标组件
+        IconsResolver({}),
+      ],
       imports: ['vue', 'vue-router', 'pinia'],
       dts: 'src/auto-imports.d.ts'
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        // 自动导入 Element Plus 组件
+        ElementPlusResolver(),
+        // 自动注册图标组件
+        IconsResolver({
+          enabledCollections: ["ep"] // element-plus图标库，其他图标库 https://icon-sets.iconify.design/
+        }),
+      ],
       dts: 'src/components.d.ts'
-    })
+    }),
+    Icons({
+      // 自动安装图标库
+      autoInstall: true,
+    }),
   ],
   resolve: {
     alias: {

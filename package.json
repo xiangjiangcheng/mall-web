@@ -13,9 +13,11 @@
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@iconify-json/ep": "^1.2.2",
     "@vitejs/plugin-vue": "^5.2.1",
     "element-plus": "^2.9.7",
     "unplugin-auto-import": "^19.1.2",
+    "unplugin-icons": "^22.1.0",
     "unplugin-vue-components": "^28.4.1",
     "vite": "^6.2.0"
   }
