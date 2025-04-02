@@ -5,7 +5,7 @@ const counterStore = useCounterStore()
 </script>
 
 <template>
-  <div>
+  <!-- <div> -->
     <!-- <a href="https://vite.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
@@ -21,7 +21,8 @@ const counterStore = useCounterStore()
     
     <!-- API 示例组件 -->
     <!-- <Login /> -->
-  </div>
+  <!-- </div> -->
+  <router-view />
 </template>
   
 <style scoped>

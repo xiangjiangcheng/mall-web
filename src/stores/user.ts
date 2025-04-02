@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { login, getUserInfo, logout } from '@/api/user'
+import { login, getUserInfo, logout, getCaptcha } from '@/api/user'
 import { setToken, removeToken } from '@/utils/auth'
-import type { LoginParams, LoginResult } from '@/types/api'
+import type { LoginParams, LoginResult } from '@/types/login'
 
 interface UserState {
   token: string
@@ -73,6 +73,16 @@ export const useUserStore = defineStore('user', {
       this.token = ''
       this.userInfo = null
       removeToken()
+    },
+
+    // 获取验证码
+    async getCaptchaAction() {
+      try {
+        const res = await getCaptcha()
+        return res
+      } catch (error) { 
+        return Promise.reject(error)
+      }
     }
   }
 }) 

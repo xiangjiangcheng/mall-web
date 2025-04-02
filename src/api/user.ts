@@ -1,5 +1,8 @@
 import { get, post } from '@/utils/request'
-import type { ApiResponse, LoginParams, LoginResult } from '@/types/api'
+import type { ApiResponse } from '@/types/api'
+import type { LoginParams, LoginResult } from '@/types/login'
+
+const AUTH_BASE_URL = '/api/v1/auth'
 
 /**
  * 用户登录
@@ -7,7 +10,7 @@ import type { ApiResponse, LoginParams, LoginResult } from '@/types/api'
  * @returns 登录结果
  */
 export function login(data: LoginParams): Promise<ApiResponse<LoginResult>> {
-  return post<ApiResponse<LoginResult>>('/auth/login', data)
+  return post<ApiResponse<LoginResult>>(AUTH_BASE_URL+'/login', data)
 }
 
 /**

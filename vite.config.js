@@ -68,10 +68,11 @@ export default defineConfig(({ command, mode }) => {
       open: true, // 自动打开浏览器
       // 反向代理解决跨域
       proxy: env.VITE_APP_USE_PROXY === 'true' ? {
+        // 代理以/dev-api开头的请求
         [env.VITE_APP_BASE_API]: {
           target: env.VITE_APP_API_URL,
           changeOrigin: true,
-          // e.g. http://localhost:3000/api/v1/users/me  ->  http://localhost:8999/api/v1/users/me
+          // e.g. http://localhost:3000/dev-api/api/v1/users/me  ->  http://localhost:8999/api/v1/users/me
           rewrite: (path) => path.replace(new RegExp('^' + env.VITE_APP_BASE_API), '')
         }
       } : {}
