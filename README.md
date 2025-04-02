@@ -9,3 +9,8 @@ Vue3 + Vite + TypeScript + Element-Plus：从零到一构建企业级后台管�
 
 # DOC
 1. unocss查找： https://unocss.dev/interactive/
+
+# Step
+整合 SCSS
+整合 UnoCSS
+整合 Pinia

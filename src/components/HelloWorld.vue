@@ -1,15 +1,26 @@
 <script setup>
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+const { username, avatar, token } = storeToRefs(userStore)
 
 defineProps({
   msg: String,
 })
 
+userStore.setToken('123456')
 const count = ref(0)
 </script>
 
 <template>
   <h1 class="text-blue">{{ msg }}</h1>
+
+  <h2>
+    username: {{ username }} <br>
+    token: {{ userStore.token }}
+  </h2>
 
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
