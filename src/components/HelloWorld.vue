@@ -9,7 +9,7 @@ const count = ref(0)
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 class="text-blue">{{ msg }}</h1>
 
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
@@ -40,10 +40,18 @@ const count = ref(0)
     <el-button type="warning"><i-ep-WarningFilled />Warning</el-button>
     <el-button type="danger"><i-ep-WarnTriangleFilled />Danger</el-button>
   </div>
-</template>
 
-<style scoped>
+  <div class="my-component">
+    customer component
+
+  </div>
+</template>
+<style lang="scss" scoped>
 .read-the-docs {
   color: #888;
+}
+
+.my-component {
+  color: $my-color;
 }
 </style>

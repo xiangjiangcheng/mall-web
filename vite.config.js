@@ -6,10 +6,18 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
+import Unocss from 'unocss/vite'
 
 const pathSrc = path.resolve(__dirname, 'src')
 // https://vite.dev/config/
 export default defineConfig({
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/styles/variables.scss" as *;`
+      }
+    }
+  },
   plugins: [
     vue(),
     AutoImport({
@@ -37,6 +45,7 @@ export default defineConfig({
       // 自动安装图标库
       autoInstall: true,
     }),
+    Unocss()
   ],
   resolve: {
     alias: {
