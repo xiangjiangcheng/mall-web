@@ -65,11 +65,13 @@ export default defineConfig(({ command, mode }) => {
     server: {
       host: '0.0.0.0',
       port: 3000,
-      open: true,
+      open: true, // 自动打开浏览器
+      // 反向代理解决跨域
       proxy: env.VITE_APP_USE_PROXY === 'true' ? {
         [env.VITE_APP_BASE_API]: {
           target: env.VITE_APP_API_URL,
           changeOrigin: true,
+          // e.g. http://localhost:3000/api/v1/users/me  ->  http://localhost:8999/api/v1/users/me
           rewrite: (path) => path.replace(new RegExp('^' + env.VITE_APP_BASE_API), '')
         }
       } : {}
