@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
 import { getCaptcha } from '@/api/user'
-import type { LoginParams } from '@/types/api'
+import type { LoginParams } from '@/types/login'
 
 const userStore = useUserStore()
 
