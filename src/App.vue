@@ -1,13 +1,12 @@
 <script setup>
 import { useCounterStore } from '@/stores/counter'
-import EnvInfo from '@/components/EnvInfo.vue'
 
 const counterStore = useCounterStore()
 </script>
 
 <template>
   <div>
-    <a href="https://vite.dev" target="_blank">
+    <!-- <a href="https://vite.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
     <a href="https://vuejs.org/" target="_blank">
@@ -15,10 +14,13 @@ const counterStore = useCounterStore()
     </a>
     <h1 class="text-3xl">vue3-element-admin-父组件</h1>
     <el-button ype="primary" @click="counterStore.increment"> click me  </el-button>
-    <HelloWorld msg="Vue + Vite msg" />
+    <HelloWorld msg="Vue + Vite msg" /> -->
     
     <!-- 环境信息组件 -->
-    <EnvInfo />
+    <!-- <EnvInfo /> -->
+    
+    <!-- API 示例组件 -->
+    <Login />
   </div>
 </template>
   

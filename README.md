@@ -14,3 +14,5 @@ Vue3 + Vite + TypeScript + Element-Plus：从零到一构建企业级后台管�
 整合 SCSS
 整合 UnoCSS
 整合 Pinia
+引入多环境配置
+整合 Axios

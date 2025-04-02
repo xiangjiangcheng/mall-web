@@ -8,9 +8,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ApiDemo: typeof import('./../components/ApiDemo.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
+    ElForm: typeof import('element-plus/es')['ElForm']
+    ElFormItem: typeof import('element-plus/es')['ElFormItem']
+    ElInput: typeof import('element-plus/es')['ElInput']
     ElTag: typeof import('element-plus/es')['ElTag']
     EnvInfo: typeof import('./../components/EnvInfo.vue')['default']
     HelloWorld: typeof import('./../components/HelloWorld.vue')['default']
@@ -18,5 +23,6 @@ declare module 'vue' {
     IEpSuccessFilled: typeof import('~icons/ep/success-filled')['default']
     IEpWarningFilled: typeof import('~icons/ep/warning-filled')['default']
     IEpWarnTriangleFilled: typeof import('~icons/ep/warn-triangle-filled')['default']
+    Login: typeof import('./../components/Login.vue')['default']
   }
 }

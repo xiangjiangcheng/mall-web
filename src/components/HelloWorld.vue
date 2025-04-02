@@ -12,7 +12,7 @@ defineProps({
   msg: String,
 })
 
-userStore.setToken('123456')
+// userStore.setToken('123456')
 const count = ref(0)
 </script>
 
