@@ -1,10 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/user'
+import { useCounterStore } from '@/stores/counter'
 
 const userStore = useUserStore()
 const { username, avatar, token } = storeToRefs(userStore)
+const counterStore = useCounterStore()
 
 defineProps({
   msg: String,
@@ -20,6 +22,11 @@ const count = ref(0)
   <h2>
     username: {{ username }} <br>
     token: {{ userStore.token }}
+  </h2>
+
+  <h2>
+    count: {{ counterStore.count }}
+    double: {{ counterStore.double }}
   </h2>
 
   <div class="card">
