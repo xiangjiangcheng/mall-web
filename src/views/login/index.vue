@@ -61,16 +61,16 @@ const loginRules = {
 
 // 获取验证码
 const getCaptcha = async () => {
-  try {
-    const res = await userStore.getCaptchaAction()
-    if (res?.data) {
-      captchaImg.value = res.data.captchaImg
-      loginForm.captchaKey = res.data.captchaKey
-    }
-  } catch (error) {
-    console.error('获取验证码失败:', error)
-    ElMessage.error('获取验证码失败')
-  }
+  // try {
+  //   const res = await userStore.getCaptchaAction()
+  //   if (res?.data) {
+  //     captchaImg.value = res.data.captchaImg
+  //     loginForm.captchaKey = res.data.captchaKey
+  //   }
+  // } catch (error) {
+  //   console.error('获取验证码失败:', error)
+  //   ElMessage.error('获取验证码失败')
+  // }
 }
 
 // 登录

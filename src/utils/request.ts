@@ -38,7 +38,7 @@ service.interceptors.response.use(
     const res = response.data
     
     // 根据自定义错误码判断请求是否成功
-    if (res.code === 0 || res.code === 200) {
+    if (res.code === "00000") {
       return res
     }
     
@@ -50,7 +50,7 @@ service.interceptors.response.use(
     })
     
     // 401: 未登录或 token 过期
-    if (res.code === 401) {
+    if (res.code === "A0230" || res.code === "A0302") {
       // 重新登录
       ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
         confirmButtonText: '重新登录',
