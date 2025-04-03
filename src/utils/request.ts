@@ -139,7 +139,15 @@ export function get<T = any>(url: string, params?: any, config?: AxiosRequestCon
 
 // 封装 POST 请求
 export function post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-  return service.post(url, data, config)
+  // 如果data是FormData类型，自动设置Content-Type
+  const headers = data instanceof FormData 
+    ? { 'Content-Type': 'multipart/form-data' }
+    : { 'Content-Type': 'application/x-www-form-urlencoded' }
+
+  return service.post(url, data, { 
+    headers,
+    ...config 
+  })
 }
 
 // 封装 PUT 请求

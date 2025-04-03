@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { login, getUserInfo, logout, getCaptcha } from '@/api/user'
 import { setToken, removeToken } from '@/utils/auth'
 import type { LoginParams, LoginResult } from '@/types/login'
+import { AxiosRequestConfig } from 'axios'
 
 interface UserState {
   token: string
@@ -33,11 +34,16 @@ export const useUserStore = defineStore('user', {
     // 登录
     async loginAction(loginParams: LoginParams) {
       try {
-        const res = await login(loginParams)
-        const { token, userInfo } = res.data
-        this.token = token
-        this.userInfo = userInfo
-        setToken(token)
+        const formData = new FormData()
+        if (loginParams.username) formData.append('username', loginParams.username)
+        if (loginParams.password) formData.append('password', loginParams.password)
+        if (loginParams.captchaKey) formData.append('captchaKey', loginParams.captchaKey)
+        if (loginParams.captcha) formData.append('captcha', loginParams.captcha)
+        
+        const res = await login(formData)
+        const { tokenType, accessToken } = res.data
+        this.token = accessToken
+        setToken(tokenType + " " + accessToken)
         return res
       } catch (error) {
         return Promise.reject(error)
