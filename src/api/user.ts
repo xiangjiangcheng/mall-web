@@ -27,7 +27,7 @@ export function getUserInfo() {
  * @returns 登出结果
  */
 export function logout() {
-  return post(`${AUTH_BASE_URL}/logout`)
+  return get(`${AUTH_BASE_URL}/logout`)
 }
 
 /**

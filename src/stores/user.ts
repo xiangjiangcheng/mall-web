@@ -1,24 +1,26 @@
 import { defineStore } from 'pinia'
 import { login, getUserInfo, logout, getCaptcha } from '@/api/user'
-import { setToken, removeToken } from '@/utils/auth'
-import type { LoginParams, LoginResult } from '@/types/login'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import type { LoginParams } from '@/types/login'
 import { AxiosRequestConfig } from 'axios'
+
+interface UserInfo {
+  id: number
+  username: string
+  nickname: string
+  avatar: string
+  roles: string[]
+  permissions: string[]
+}
 
 interface UserState {
   token: string
-  userInfo: {
-    id: number
-    username: string
-    nickname: string
-    avatar: string
-    roles: string[]
-    permissions: string[]
-  } | null
+  userInfo: UserInfo | null
 }
 
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    token: '',
+    token: getToken() || '',
     userInfo: null
   }),
   
@@ -31,47 +33,15 @@ export const useUserStore = defineStore('user', {
   },
   
   actions: {
-    // 登录
-    async loginAction(loginParams: LoginParams) {
-      try {
-        const formData = new FormData()
-        if (loginParams.username) formData.append('username', loginParams.username)
-        if (loginParams.password) formData.append('password', loginParams.password)
-        if (loginParams.captchaKey) formData.append('captchaKey', loginParams.captchaKey)
-        if (loginParams.captcha) formData.append('captcha', loginParams.captcha)
-        
-        const res = await login(formData)
-        const { tokenType, accessToken } = res.data
-        this.token = accessToken
-        setToken(tokenType + " " + accessToken)
-        return res
-      } catch (error) {
-        return Promise.reject(error)
-      }
+    // 设置 token
+    setToken(token: string) {
+      this.token = token
+      setToken(token)
     },
     
-    // 获取用户信息
-    async getUserInfoAction() {
-      try {
-        const res = await getUserInfo()
-        this.userInfo = res.data
-        return res
-      } catch (error) {
-        return Promise.reject(error)
-      }
-    },
-    
-    // 登出
-    async logoutAction() {
-      try {
-        const res = await logout()
-        this.token = ''
-        this.userInfo = null
-        removeToken()
-        return res
-      } catch (error) {
-        return Promise.reject(error)
-      }
+    // 设置用户信息
+    setUserInfo(userInfo: UserInfo) {
+      this.userInfo = userInfo
     },
     
     // 重置状态
@@ -81,6 +51,48 @@ export const useUserStore = defineStore('user', {
       removeToken()
     },
 
+    // 登录
+    async loginAction(loginParams: LoginParams) {
+      try {
+        const formData = new FormData()
+        if (loginParams.username) formData.append('username', loginParams.username)
+        if (loginParams.password) formData.append('password', loginParams.password)
+        if (loginParams.captchaKey) formData.append('captchaKey', loginParams.captchaKey)
+        if (loginParams.captcha) formData.append('captcha', loginParams.captcha)
+        
+        const { data } = await login(formData)
+        const { tokenType, accessToken } = data
+        this.setToken(`${accessToken}`)
+
+        // 登录成功之后，获取me
+        return data
+      } catch (error) {
+        this.resetState()
+        throw error
+      }
+    },
+    
+    // 获取用户信息
+    async getUserInfoAction() {
+      try {
+        const { data } = await getUserInfo()
+        this.setUserInfo(data)
+        return data
+      } catch (error) {
+        this.resetState()
+        throw error
+      }
+    },
+    
+    // 退出登录
+    async logoutAction() {
+      try {
+        await logout()
+      } finally {
+        this.resetState()
+      }
+    },
+    
     // 获取验证码
     async getCaptchaAction() {
       try {

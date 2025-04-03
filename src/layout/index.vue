@@ -34,15 +34,15 @@
       <!-- 头部 -->
       <div class="navbar">
         <div class="right-menu">
-          <el-dropdown>
+          <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-              管理员<el-icon class="el-icon--right"><arrow-down /></el-icon>
+            当前登录用户： {{ userStore.username }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>个人信息</el-dropdown-item>
-                <el-dropdown-item>修改密码</el-dropdown-item>
-                <el-dropdown-item divided>退出登录</el-dropdown-item>
+                <el-dropdown-item command="profile">个人信息</el-dropdown-item>
+                <el-dropdown-item command="password">修改密码</el-dropdown-item>
+                <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -58,10 +58,45 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { Monitor, Setting, User, UserFilled } from '@element-plus/icons-vue'
+import { ElMessageBox } from 'element-plus'
+import { useUserStore } from '@/stores/user'
 
 const route = useRoute()
+const router = useRouter()
+const userStore = useUserStore()
+
+// 处理下拉菜单命令
+const handleCommand = (command: string) => {
+  switch (command) {
+    case 'profile':
+      // TODO: 跳转到个人信息页面
+      break
+    case 'password':
+      // TODO: 跳转到修改密码页面
+      break
+    case 'logout':
+      handleLogout()
+      break
+  }
+}
+
+// 处理退出登录
+const handleLogout = () => {
+  ElMessageBox.confirm('确认退出登录吗？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    try {
+      await userStore.logoutAction()
+      router.push('/login')
+    } catch (error) {
+      console.error('退出登录失败:', error)
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
