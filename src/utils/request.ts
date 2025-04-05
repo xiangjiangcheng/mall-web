@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getToken } from '@/utils/auth'
+import { getToken, removeToken } from '@/utils/auth'
 import { isUseProxy, getApiUrl } from '@/utils/env'
+import router from "@/router";
 
 // 创建 axios 实例
 const service: AxiosInstance = axios.create({
@@ -36,9 +37,10 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: AxiosResponse) => {
     const res = response.data
-    
+    const status = response.status;
     // 根据自定义错误码判断请求是否成功
-    if (res.code === "00000") {
+    if (status === 200 && res.code === "00000") {
+      console.log("dddd")
       return res
     }
     
@@ -49,8 +51,8 @@ service.interceptors.response.use(
       duration: 5 * 1000
     })
     
-    // 401: 未登录或 token 过期
-    if (res.code === "A0230" || res.code === "A0302") {
+    // 未登录或 token 过期
+    if (res.code === "A0230") {
       // 重新登录
       ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
         confirmButtonText: '重新登录',
@@ -58,6 +60,7 @@ service.interceptors.response.use(
         type: 'warning'
       }).then(() => {
         // 清除 token 并跳转到登录页
+        removeToken();
         // 这里需要调用你的登出方法
         // logout()
         // 跳转到登录页
@@ -74,6 +77,15 @@ service.interceptors.response.use(
     // 处理 HTTP 错误
     if (response) {
       const { status } = response
+      const code = response.data?.code
+      const msg = response.data?.message
+
+      console.log('code' + code + "|msg="+msg)
+      if (code === "A0230" ) {
+        removeToken();
+        router.push("/login");
+      }
+
       let message = '系统错误'
       
       switch (status) {
@@ -113,22 +125,22 @@ service.interceptors.response.use(
         default:
           message = `连接出错(${status})`
       }
-      
+
+      message = msg || "系统出错";
       ElMessage({
         message,
         type: 'error',
         duration: 5 * 1000
-      })
+      });
     } else {
       // 处理网络错误
       ElMessage({
         message: '网络连接异常，请稍后再试',
         type: 'error',
         duration: 5 * 1000
-      })
+      });
     }
-    
-    return Promise.reject(error)
+    return Promise.reject(error.message)
   }
 )
 

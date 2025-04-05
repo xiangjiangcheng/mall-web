@@ -68,7 +68,7 @@ const handleAdd = () => {
 }
 
 const handleEdit = (row: any) => {
-  ElMessage.info(`点击了编辑，ID: ${row.id}`)
+  ElMessage.info(`点击了编辑, ID: ${row.id}`)
 }
 
 const handleDelete = (row: any) => {

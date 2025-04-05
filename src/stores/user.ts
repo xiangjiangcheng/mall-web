@@ -63,8 +63,8 @@ export const useUserStore = defineStore('user', {
         const { data } = await login(formData)
         const { tokenType, accessToken } = data
         this.setToken(`${accessToken}`)
-
         // 登录成功之后，获取me
+        this.getUserInfoAction();
         return data
       } catch (error) {
         this.resetState()
