@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
@@ -16,16 +16,16 @@ const loginForm = ref<LoginParams>({
 })
 
 // 验证码图片
-const captchaImg = ref('')
+const captchaBase64 = ref('')
 
 // 加载状态
 const loading = ref(false)
 
 // 获取验证码
-const getCaptchaImg = async () => {
+const getcaptchaBase64 = async () => {
   try {
     const res = await getCaptcha()
-    captchaImg.value = res.data.captchaImg
+    captchaBase64.value = res.data.captchaBase64
     loginForm.value.captchaKey = res.data.captchaKey
   } catch (error) {
     console.error('获取验证码失败:', error)
@@ -53,7 +53,7 @@ const handleLogin = async () => {
   } catch (error) {
     console.error('登录失败:', error)
     // 登录失败后刷新验证码
-    getCaptchaImg()
+    getcaptchaBase64()
   } finally {
     loading.value = false
   }
@@ -61,7 +61,7 @@ const handleLogin = async () => {
 
 // 组件挂载时获取验证码
 onMounted(() => {
-  getCaptchaImg()
+  getcaptchaBase64()
 })
 </script>
 
@@ -88,13 +88,13 @@ onMounted(() => {
         <el-form-item label="验证码">
           <div class="captcha-container">
             <el-input v-model="loginForm.captcha" placeholder="请输入验证码" />
-            <img v-if="captchaImg" :src="captchaImg" class="captcha-img" @click="getCaptchaImg" alt="验证码" />
+            <img v-if="captchaBase64" :src="captchaBase64" class="captcha-img" @click="getcaptchaBase64" alt="验证码" />
           </div>
         </el-form-item>
         
         <el-form-item>
           <el-button type="primary" :loading="loading" @click="handleLogin">登录</el-button>
-          <el-button @click="getCaptchaImg">刷新验证码</el-button>
+          <el-button @click="getcaptchaBase64">刷新验证码</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -137,4 +137,4 @@ onMounted(() => {
     }
   }
 }
-</style> 
+</style>  -->

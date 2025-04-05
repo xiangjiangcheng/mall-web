@@ -16,13 +16,13 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item prop="captcha">
-        <el-input v-model="loginForm.captcha" placeholder="验证码">
+      <el-form-item prop="captchaCode">
+        <el-input v-model="loginForm.captchaCode" placeholder="验证码">
           <template #prefix>
             <el-icon><Picture /></el-icon>
           </template>
           <template #append>
-            <img :src="captchaImg" alt="验证码" class="captcha-img" @click="getCaptcha" />
+            <img :src="captchaBase64" alt="验证码" class="captcha-img" @click="getCaptcha" />
           </template>
         </el-input>
       </el-form-item>
@@ -44,12 +44,12 @@ const router = useRouter()
 const userStore = useUserStore()
 const loginFormRef = ref()
 const loading = ref(false)
-const captchaImg = ref('')
+const captchaBase64 = ref('')
 
 const loginForm = reactive({
-  username: '',
-  password: '',
-  captcha: '',
+  username: 'admin',
+  password: '123456',
+  captchaCode: '',
   captchaKey: ''
 })
 
@@ -61,16 +61,16 @@ const loginRules = {
 
 // 获取验证码
 const getCaptcha = async () => {
-  // try {
-  //   const res = await userStore.getCaptchaAction()
-  //   if (res?.data) {
-  //     captchaImg.value = res.data.captchaImg
-  //     loginForm.captchaKey = res.data.captchaKey
-  //   }
-  // } catch (error) {
-  //   console.error('获取验证码失败:', error)
-  //   ElMessage.error('获取验证码失败')
-  // }
+  try {
+    const res = await userStore.getCaptchaAction()
+    if (res?.data) {
+      captchaBase64.value = res.data.captchaBase64
+      loginForm.captchaKey = res.data.captchaKey
+    }
+  } catch (error) {
+    console.error('获取验证码失败:', error)
+    ElMessage.error('获取验证码失败')
+  }
 }
 
 // 登录

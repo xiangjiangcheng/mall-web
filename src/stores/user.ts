@@ -58,10 +58,10 @@ export const useUserStore = defineStore('user', {
         if (loginParams.username) formData.append('username', loginParams.username)
         if (loginParams.password) formData.append('password', loginParams.password)
         if (loginParams.captchaKey) formData.append('captchaKey', loginParams.captchaKey)
-        if (loginParams.captcha) formData.append('captcha', loginParams.captcha)
+        if (loginParams.captchaCode) formData.append('captchaCode', loginParams.captchaCode)
         
         const { data } = await login(formData)
-        const { tokenType, accessToken } = data
+        const { accessToken, refreshToken } = data
         this.setToken(`${accessToken}`)
         // 登录成功之后，获取me
         this.getUserInfoAction();
