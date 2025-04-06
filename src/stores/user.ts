@@ -1,16 +1,18 @@
 import { defineStore } from 'pinia'
-import { login, getUserInfo, logout, getCaptcha } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login, getUserInfo, logout, getCaptcha, updateUserInfo as updateUserInfoApi } from '@/api/user'
+import { getToken, setToken, removeToken, getUserInfo as getStoredUserInfo, setUserInfo as setStoredUserInfo, removeUserInfo } from '@/utils/auth'
 import type { LoginParams } from '@/types/login'
 import { AxiosRequestConfig } from 'axios'
 
-interface UserInfo {
+export interface UserInfo {
   id: number
   username: string
   nickname: string
   avatar: string
   roles: string[]
   permissions: string[]
+  mobile?: string
+  email?: string
 }
 
 interface UserState {
@@ -21,13 +23,15 @@ interface UserState {
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     token: getToken() || '',
-    userInfo: null
+    userInfo: getStoredUserInfo()
   }),
   
   getters: {
     isLoggedIn: (state) => !!state.token,
     username: (state) => state.userInfo?.username || '',
+    nickname: (state) => state.userInfo?.nickname || '',
     avatar: (state) => state.userInfo?.avatar || '',
+    userInfo: (state) => state.userInfo || null,
     roles: (state) => state.userInfo?.roles || [],
     permissions: (state) => state.userInfo?.permissions || []
   },
@@ -42,6 +46,7 @@ export const useUserStore = defineStore('user', {
     // 设置用户信息
     setUserInfo(userInfo: UserInfo) {
       this.userInfo = userInfo
+      setStoredUserInfo(userInfo)
     },
     
     // 重置状态
@@ -49,6 +54,7 @@ export const useUserStore = defineStore('user', {
       this.token = ''
       this.userInfo = null
       removeToken()
+      removeUserInfo()
     },
 
     // 登录
@@ -61,10 +67,10 @@ export const useUserStore = defineStore('user', {
         if (loginParams.captchaCode) formData.append('captchaCode', loginParams.captchaCode)
         
         const { data } = await login(formData)
-        const { accessToken, refreshToken } = data
+        const { accessToken } = data
         this.setToken(`${accessToken}`)
-        // 登录成功之后，获取me
-        this.getUserInfoAction();
+        // 登录成功之后，获取用户信息
+        await this.getUserInfoAction()
         return data
       } catch (error) {
         this.resetState()
@@ -100,6 +106,17 @@ export const useUserStore = defineStore('user', {
         return res
       } catch (error) { 
         return Promise.reject(error)
+      }
+    },
+
+    // 更新用户信息
+    async updateUserInfo(userInfo: Partial<UserInfo>) {
+      try {
+        const { data } = await updateUserInfoApi(this.userInfo!.id, userInfo)
+        this.setUserInfo({ ...this.userInfo, ...data } as UserInfo)
+        return data
+      } catch (error) {
+        throw error
       }
     }
   }

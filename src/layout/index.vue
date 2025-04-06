@@ -36,7 +36,7 @@
         <div class="right-menu">
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-            当前登录用户： {{ userStore.username }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+              {{ userStore.username }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { Monitor, Setting, User, UserFilled } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/stores/user'
 
 const route = useRoute()
@@ -71,10 +71,14 @@ const userStore = useUserStore()
 const handleCommand = (command: string) => {
   switch (command) {
     case 'profile':
-      // TODO: 跳转到个人信息页面
+      router.push('/profile')
       break
     case 'password':
       // TODO: 跳转到修改密码页面
+      ElMessageBox.alert('修改密码功能暂未实现', '提示', {
+        confirmButtonText: '确定',
+        type: 'warning'
+      })
       break
     case 'logout':
       handleLogout()

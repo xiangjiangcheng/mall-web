@@ -1,6 +1,7 @@
 import { get, post } from '@/utils/request'
 import type { ApiResponse } from '@/types/api'
 import type { LoginParams, LoginResult } from '@/types/login'
+import request from '@/utils/request'
 
 const AUTH_BASE_URL = '/api/v1/auth'
 const USER_BASE_URL = '/api/v1/users'
@@ -36,4 +37,15 @@ export function logout() {
  */
 export function getCaptcha() {
   return get(`${AUTH_BASE_URL}/captcha`)
+}
+
+/**
+ * 更新用户信息
+ */
+export function updateUserInfo(id: number, data: any) {
+  return request({
+    url: `${USER_BASE_URL}/${id}`,
+    method: 'put',
+    data
+  })
 } 

@@ -86,7 +86,7 @@ const handleLogin = async () => {
     router.push('/')
   } catch (error) {
     console.error('登录失败:', error)
-    ElMessage.error('登录失败')
+    // ElMessage.error('登录失败')
     getCaptcha()
   } finally {
     loading.value = false
