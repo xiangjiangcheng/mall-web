@@ -21,6 +21,7 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
@@ -36,8 +37,8 @@
           :total="total"
           :page-sizes="[10, 20, 50, 100]"
           layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          @update:current-page="handleCurrentChange"
+          @update:page-size="handleSizeChange"
         />
       </div>
     </el-card>
@@ -47,21 +48,23 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { getUserPage, addUser, updateUser, deleteUser } from '@/api/user'
 
 const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(100)
 
-const tableData = ref([
-  {
-    id: 1,
-    username: 'admin',
-    nickname: '管理员',
-    email: 'admin@example.com',
-    mobile: '13800138000',
-    status: 1
-  }
-])
+const tableData = ref()
+
+const handleQuery = async () => {
+    await getUserPage(currentPage.value, pageSize.value).then(data => {
+      tableData.value = data.data.list;
+      total.value = data.data.total;
+    }).finally(
+      // 关闭loading
+      
+    )
+}
 
 const handleAdd = () => {
   ElMessage.info('点击了新增')
@@ -88,6 +91,11 @@ const handleCurrentChange = (val: number) => {
   currentPage.value = val
   // 重新加载数据
 }
+
+onMounted(() => {
+  // 初始化user page
+  handleQuery();
+})
 </script>
 
 <style lang="scss" scoped>

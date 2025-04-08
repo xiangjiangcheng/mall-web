@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { login, getUserInfo, logout, getCaptcha, updateUserInfo as updateUserInfoApi } from '@/api/user'
+import { login, logout, getCaptcha } from '@/api/auth'
+import { getUserInfo, updateUserInfo as updateUserInfoApi } from '@/api/user'
 import { getToken, setToken, removeToken, getUserInfo as getStoredUserInfo, setUserInfo as setStoredUserInfo, removeUserInfo } from '@/utils/auth'
 import type { LoginParams } from '@/types/login'
-import { AxiosRequestConfig } from 'axios'
 
 export interface UserInfo {
   id: number
@@ -31,7 +31,6 @@ export const useUserStore = defineStore('user', {
     username: (state) => state.userInfo?.username || '',
     nickname: (state) => state.userInfo?.nickname || '',
     avatar: (state) => state.userInfo?.avatar || '',
-    userInfo: (state) => state.userInfo || null,
     roles: (state) => state.userInfo?.roles || [],
     permissions: (state) => state.userInfo?.permissions || []
   },

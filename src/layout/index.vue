@@ -36,7 +36,7 @@
         <div class="right-menu">
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-              {{ userStore.username }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+              {{ userStore.nickname }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
