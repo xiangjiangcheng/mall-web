@@ -52,9 +52,8 @@ import { getUserPage, addUser, updateUser, deleteUser } from '@/api/user'
 
 const currentPage = ref(1)
 const pageSize = ref(10)
-const total = ref(100)
-
-const tableData = ref()
+const total = ref<number>(0)
+const tableData = ref<any[]>([])
 
 const handleQuery = async () => {
     await getUserPage(currentPage.value, pageSize.value).then(data => {
@@ -100,7 +99,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .user-container {
-  padding: 20px;
   
   .card-header {
     display: flex;

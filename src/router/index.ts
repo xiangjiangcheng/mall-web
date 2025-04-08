@@ -1,11 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import { getToken } from '@/utils/auth'
+import { useTabsStore } from '@/stores/tabs'
 
 // 白名单路由
 const whiteList = ['/login']
 
 const routes: RouteRecordRaw[] = [
+  {
+    path: '/redirect',
+    component: () => import('@/layout/index.vue'),
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index.vue')
+      }
+    ]
+  },
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
@@ -15,7 +26,7 @@ const routes: RouteRecordRaw[] = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index.vue'),
         name: 'Dashboard',
-        meta: { title: '首页', icon: 'dashboard' }
+        meta: { title: '首页', icon: 'Monitor' }
       },
       {
         path: 'profile',
@@ -66,6 +77,22 @@ router.beforeEach((to, from, next) => {
       // 已登录，跳转到首页
       next({ path: '/' })
     } else {
+      // 添加标签页
+      if (to.meta.title) {
+        const tabsStore = useTabsStore()
+        tabsStore.addTab({
+          path: to.path,
+          title: to.meta.title as string,
+          name: to.name as string,
+          fullPath: to.fullPath,
+          query: to.query,
+          params: to.params,
+          meta: {
+            title: to.meta.title as string,
+            icon: to.meta.icon as string
+          }
+        })
+      }
       next()
     }
   } else {

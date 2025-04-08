@@ -97,7 +97,6 @@ const handleCurrentChange = (val: number) => {
 
 <style lang="scss" scoped>
 .role-container {
-  padding: 20px;
   
   .card-header {
     display: flex;

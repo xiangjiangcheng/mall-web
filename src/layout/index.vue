@@ -6,6 +6,9 @@
         :default-active="route.path"
         class="el-menu-vertical"
         :router="true"
+        background-color="#304156"
+        text-color="#bfcbd9"
+        active-text-color="#409EFF"
       >
         <el-menu-item index="/dashboard">
           <el-icon><Monitor /></el-icon>
@@ -49,9 +52,16 @@
         </div>
       </div>
 
+      <!-- 标签页 -->
+      <TabsView />
+
       <!-- 内容区 -->
       <div class="app-main">
-        <router-view />
+        <router-view v-slot="{ Component }">
+          <keep-alive :include="tabsStore.cachedTabs">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
       </div>
     </div>
   </div>
@@ -60,12 +70,15 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { Monitor, Setting, User, UserFilled } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/stores/user'
+import { useTabsStore } from '@/stores/tabs'
+import TabsView from '@/components/TabsView/index.vue'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const tabsStore = useTabsStore()
 
 // 处理下拉菜单命令
 const handleCommand = (command: string) => {
@@ -115,17 +128,14 @@ const handleLogout = () => {
     
     .el-menu {
       border-right: none;
-      background-color: #304156;
       
       .el-menu-item, .el-sub-menu__title {
-        color: #bfcbd9;
-        
         &:hover {
-          color: #fff;
+          background-color: #263445;
         }
         
         &.is-active {
-          color: #409eff;
+          background-color: #263445;
         }
       }
     }
@@ -156,8 +166,9 @@ const handleLogout = () => {
     
     .app-main {
       flex: 1;
-      padding: 20px;
+      padding: 6px;
       overflow: auto;
+      background-color: #f0f2f5;
     }
   }
 }
