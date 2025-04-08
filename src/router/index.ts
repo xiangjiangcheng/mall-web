@@ -80,6 +80,22 @@ router.beforeEach((to, from, next) => {
       // 添加标签页
       if (to.meta.title) {
         const tabsStore = useTabsStore()
+        // 初始化首页标签
+        if (to.path === '/dashboard') {
+          tabsStore.initHomeTab({
+            path: to.path,
+            title: to.meta.title as string,
+            name: to.name as string,
+            fullPath: to.fullPath,
+            query: to.query,
+            params: to.params,
+            meta: {
+              title: to.meta.title as string,
+              icon: to.meta.icon as string
+            }
+          })
+        }
+        // 添加当前页标签
         tabsStore.addTab({
           path: to.path,
           title: to.meta.title as string,

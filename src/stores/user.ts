@@ -3,6 +3,7 @@ import { login, logout, getCaptcha } from '@/api/auth'
 import { getUserInfo, updateUserInfo as updateUserInfoApi } from '@/api/user'
 import { getToken, setToken, removeToken, getUserInfo as getStoredUserInfo, setUserInfo as setStoredUserInfo, removeUserInfo } from '@/utils/auth'
 import type { LoginParams } from '@/types/login'
+import { useTabsStore } from '@/stores/tabs'
 
 export interface UserInfo {
   id: number
@@ -54,6 +55,7 @@ export const useUserStore = defineStore('user', {
       this.userInfo = null
       removeToken()
       removeUserInfo()
+      useTabsStore().closeAllTabs()
     },
 
     // 登录
