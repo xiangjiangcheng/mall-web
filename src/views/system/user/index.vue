@@ -8,7 +8,7 @@
         </div>
       </template>
       
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" v-loading="loading" style="width: 100%">
         <el-table-column prop="id" label="ID" width="80" />
         <el-table-column prop="username" label="用户名" />
         <el-table-column prop="nickname" label="昵称" />
@@ -54,14 +54,18 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref<number>(0)
 const tableData = ref<any[]>([])
+const loading = ref(false)
 
 const handleQuery = async () => {
+    loading.value = true
     await getUserPage(currentPage.value, pageSize.value).then(data => {
       tableData.value = data.data.list;
       total.value = data.data.total;
     }).finally(
       // 关闭loading
-      
+      () => {
+        loading.value = false
+      }
     )
 }
 
