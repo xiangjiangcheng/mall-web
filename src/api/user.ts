@@ -1,21 +1,52 @@
+import { UserForm } from '@/types/api'
 import { get, post, put, del } from '@/utils/request'
 
 const USER_BASE_URL = '/api/v1/users'
 
-export const getUserPage = (currentPage: number, pageSize: number) => {
-  return get(`${USER_BASE_URL}/page?currentPage=${currentPage}&pageSize=${pageSize}`)
+/**
+ * 获取用户分页列表
+ */
+export function getUserList(params: {
+  pageNum: number
+  pageSize: number
+  keywords?: string
+}) {
+  return get(`${USER_BASE_URL}/page`, params)
 }
 
-export const addUser = (data: any) => {
-  return post(`${USER_BASE_URL}/add`, data)
+/**
+ * 获取用户详情
+ */
+export function getUserDetail(id: number) {
+  return get(`${USER_BASE_URL}/${id}`)
 }
 
-export const updateUser = (id: number, data: any) => {
-  return put(`${USER_BASE_URL}/update/${id}`, data)
+/**
+ * 添加用户
+ */
+export function addUser(data: UserForm) {
+  return post(`${USER_BASE_URL}`, data)
 }
 
-export const deleteUser = (id: number) => {
-  return del(`${USER_BASE_URL}/delete/${id}`)
+/**
+ * 修改用户
+ */
+export function updateUser(id: number, data: UserForm) {
+  return put(`${USER_BASE_URL}/${id}`, data)
+}
+
+/**
+ * 删除用户
+ */
+export function deleteUser(id: number) {
+  return del(`${USER_BASE_URL}/${id}`)
+}
+
+/**
+ * 修改用户状态
+ */
+export function updateUserStatus(id: number, status: number) {
+  return put(`${USER_BASE_URL}/${id}/status`, { status })
 }
 
 /**

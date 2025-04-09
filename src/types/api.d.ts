@@ -54,3 +54,33 @@ export interface RoleForm {
   status: number
   description?: string
 }
+
+// 用户类型定义
+export interface User {
+  id: number
+  username: string
+  nickname: string
+  mobile: string
+  gender: number
+  status: number
+  roleIds: number[]
+  createTime: string
+  updateTime: string
+}
+
+// 用户表单类型
+export interface UserForm {
+  id?: number
+  username: string
+  nickname: string
+  mobile: string
+  gender: number
+  status: number
+  roleIds: number[]
+}
+
+// 用户列表响应类型
+export interface UserPageResult {
+  list: User[]
+  total: number
+}

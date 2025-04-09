@@ -154,7 +154,7 @@ export function post<T = any>(url: string, data?: any, config?: AxiosRequestConf
   // 如果data是FormData类型，自动设置Content-Type
   const headers = data instanceof FormData 
     ? { 'Content-Type': 'multipart/form-data' }
-    : { 'Content-Type': 'application/x-www-form-urlencoded' }
+    : { 'Content-Type': 'application/json' }
 
   return service.post(url, data, { 
     headers,

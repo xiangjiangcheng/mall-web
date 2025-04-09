@@ -67,7 +67,7 @@ import { View, User, ShoppingCart, Goods } from '@element-plus/icons-vue'
 
 <style lang="scss" scoped>
 .dashboard-container {
-  // padding: 20px;
+  padding: 20px;
   
   .el-card {
     margin-bottom: 20px;
