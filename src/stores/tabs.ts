@@ -11,7 +11,9 @@ export const useTabsStore = defineStore('tabs', {
     
     return {
       visitedTabs,
-      cachedTabs: visitedTabs.map((tab: TabItem) => tab.name).filter(Boolean)
+      cachedTabs: visitedTabs.map((tab: TabItem) => tab.name).filter(Boolean),
+      activeTab: '',
+      tabs: visitedTabs
     }
   },
   
@@ -52,6 +54,7 @@ export const useTabsStore = defineStore('tabs', {
     
     // 关闭所有标签页
     closeAllTabs(keepHome = false) {
+      console.log('closeAllTabs', keepHome) 
       if (keepHome) {
         this.visitedTabs = this.visitedTabs.filter((item) => item.path === '/dashboard')
       } else {
@@ -76,6 +79,10 @@ export const useTabsStore = defineStore('tabs', {
       if (!this.visitedTabs.some(v => v.path === '/dashboard')) {
         this.addTab(tab)
       }
+    },
+
+    setActiveTab(path: string) {
+      this.activeTab = path
     }
   }
 }) 

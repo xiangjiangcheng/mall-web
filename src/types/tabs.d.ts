@@ -9,9 +9,12 @@ export interface TabItem {
     title: string
     icon?: string
   }
+  children?: TabItem[]
 }
 
 export interface TabsState {
   visitedTabs: TabItem[]
   cachedTabs: string[]
+  activeTab: string
+  tabs: TabItem[]
 } 

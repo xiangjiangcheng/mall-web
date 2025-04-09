@@ -108,6 +108,8 @@ router.beforeEach((to, from, next) => {
             icon: to.meta.icon as string
           }
         })
+        console.log("to.path: " + to.path)
+        tabsStore.setActiveTab(to.path)
       }
       next()
     }

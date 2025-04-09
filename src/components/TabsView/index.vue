@@ -110,8 +110,8 @@ const route = useRoute()
 const router = useRouter()
 const tabsStore = useTabsStore()
 
-const activeTab = ref(route.path)
-const visitedTabs = computed(() => tabsStore.visitedTabs)
+const activeTab = computed(() => tabsStore.activeTab) // 自动更新选中的标签
+const visitedTabs = computed(() => tabsStore.visitedTabs) // 响应式获取标签列表
 const currentContextTab = ref<TabItem | null>(null)
 const showContextMenu = ref(false)
 const contextMenuStyle = ref({
@@ -121,6 +121,7 @@ const contextMenuStyle = ref({
 
 // 计算面包屑导航
 const breadcrumbs = computed(() => {
+  console.log("breadcrumbs: " + route.matched)
   const matched = route.matched
   return matched.map(item => ({
     path: item.path,
