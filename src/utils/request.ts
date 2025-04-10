@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import { getToken, removeToken } from '@/utils/auth'
 import { isUseProxy, getApiUrl } from '@/utils/env'
 import router from "@/router";
@@ -82,8 +82,7 @@ service.interceptors.response.use(
 
       console.log('code' + code + "|msg="+msg)
       if (code === "A0230" ) {
-        removeToken();
-        router.push("/login");
+        handleSessionExpired();
       }
 
       let message = '系统错误'
@@ -143,6 +142,16 @@ service.interceptors.response.use(
     return Promise.reject(error.message)
   }
 )
+
+function handleSessionExpired() {
+  ElNotification({
+    title: '系统提示',
+    message: h('i', { style: 'color: teal' }, '登录状态已过期，请重新登录'),
+  })
+  
+  removeToken();
+  router.push("/login");
+}
 
 // 封装 GET 请求
 export function get<T = any>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T> {

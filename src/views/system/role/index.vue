@@ -129,7 +129,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance } from 'element-plus'
-import { getRoleList, addRole, updateRole, deleteRole, updateRoleStatus } from '@/api/role'
+import { getRoleList, getRoleDetail, addRole, updateRole, deleteRole, updateRoleStatus } from '@/api/role'
 import type { Role, RoleForm } from '@/types/api'
 
 // 查询参数
@@ -192,6 +192,12 @@ const getList = async () => {
   }
 }
 
+// 获取角色详情
+const getDetail = async (id: number) => {
+  const { data } = await getRoleDetail(id)
+  return data
+}
+
 // 查询操作
 const handleQuery = () => {
   queryParams.pageNum = 1
@@ -231,10 +237,11 @@ const handleAdd = () => {
 }
 
 // 修改角色
-const handleUpdate = (row: Role) => {
+const handleUpdate = async (row: Role) => {
   dialog.title = '修改角色'
   dialog.visible = true
-  Object.assign(form, row)
+  const roleDetail = await getDetail(row.id)
+  Object.assign(form, roleDetail)
 }
 
 // 删除角色
