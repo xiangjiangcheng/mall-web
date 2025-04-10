@@ -84,13 +84,11 @@
       </div>
     </el-card>
 
-    <!-- 添加/修改对话框 -->
-    <el-dialog
-      :title="dialog.title"
-      v-model="dialog.visible"
-      width="500px"
-      @close="handleDialogClose"
-    >
+  <!-- 添加/修改对话框 -->
+  <el-drawer 
+    v-model="dialog.visible" 
+    :title="dialog.title"
+    :direction="direction">
       <el-form
         ref="dialogForm"
         :model="form"
@@ -141,7 +139,7 @@
           <el-button type="primary" @click="handleSubmit">确 定</el-button>
         </div>
       </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 

@@ -57,4 +57,21 @@ export function deleteRole(id: number) {
  */
 export function updateRoleStatus(id: number, status: number) {
   return put(`${ROLE_BASE_URL}/${id}/status`, { status })
+}
+
+/**
+ * 获取角色权限
+ */
+export function getRolePermissions(roleId: number) {
+  return get(`${ROLE_BASE_URL}/${roleId}/menuIds`)
+}
+
+/**
+ * 分配角色权限
+ */
+export function assignPermissions(data: {
+  roleId: number
+  menuIds: number[]
+}) {
+  return put(`${ROLE_BASE_URL}/${data.roleId}/menus`, data.menuIds)
 } 

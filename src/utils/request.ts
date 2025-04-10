@@ -40,7 +40,6 @@ service.interceptors.response.use(
     const status = response.status;
     // 根据自定义错误码判断请求是否成功
     if (status === 200 && res.code === "00000") {
-      console.log("dddd")
       return res
     }
     
@@ -53,19 +52,7 @@ service.interceptors.response.use(
     
     // 未登录或 token 过期
     if (res.code === "A0230") {
-      // 重新登录
-      ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
-        confirmButtonText: '重新登录',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        // 清除 token 并跳转到登录页
-        removeToken();
-        // 这里需要调用你的登出方法
-        // logout()
-        // 跳转到登录页
-        window.location.href = '/login'
-      })
+      handleSessionExpired();
     }
     
     return Promise.reject(new Error(res.msg || '系统错误'))

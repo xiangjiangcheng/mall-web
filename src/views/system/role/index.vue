@@ -55,6 +55,13 @@
               编辑
             </el-button>
             <el-button
+              type="primary"
+              link
+              @click="handleAssignPermission(scope.row)"
+            >
+              分配权限
+            </el-button>
+            <el-button
               type="danger"
               link
               @click="handleDelete(scope.row)"
@@ -122,6 +129,35 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 分配权限对话框 -->
+    <el-drawer 
+      v-model="permissionDrawer.visible"
+      :title="permissionDrawer.title"
+      :direction="direction">
+      <el-form :model="form" label-width="80px">
+        <el-form-item label="角色名称">
+          <el-input v-model="form.name" disabled />
+        </el-form-item>
+        <el-form-item label="权限">
+          <el-tree
+            ref="permissionTree"
+            :data="treeData"
+            :props="defaultProps"
+            node-key="value"
+            show-checkbox
+            default-expand-all
+            :default-checked-keys="checkedKeys"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div style="flex: auto">
+          <el-button @click="permissionDrawer.visible = false">取消</el-button>
+          <el-button type="primary" @click="handlePermissionSubmit">确定</el-button>
+        </div>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
@@ -129,7 +165,17 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance } from 'element-plus'
-import { getRoleList, getRoleDetail, addRole, updateRole, deleteRole, updateRoleStatus } from '@/api/role'
+import { 
+  getRoleList, 
+  getRoleDetail, 
+  addRole, 
+  updateRole, 
+  deleteRole, 
+  updateRoleStatus, 
+  getRolePermissions as fetchRolePermissions,
+  assignPermissions 
+} from '@/api/role'
+import { getPermissionTree as fetchPermissionTree } from '@/api/menu'
 import type { Role, RoleForm } from '@/types/api'
 
 // 查询参数
@@ -146,6 +192,12 @@ const loading = ref(false)
 
 // 对话框数据
 const dialog = reactive({
+  visible: false,
+  title: ''
+})
+
+// 分配权限抽屉数据
+const permissionDrawer = reactive({
   visible: false,
   title: ''
 })
@@ -295,6 +347,58 @@ const handleSubmit = async () => {
 const handleDialogClose = () => {
   if (!dialogForm.value) return
   dialogForm.value.resetFields()
+}
+
+const treeData = ref([])
+const permissionTree = ref()
+const checkedKeys = ref<number[]>([])
+const defaultProps = {
+  children: 'children',
+  label: 'label'
+}
+
+// 获取权限树数据
+const getPermissionTree = async () => {
+  const { data } = await fetchPermissionTree()
+  treeData.value = data
+}
+
+// 获取角色权限
+const getRolePermissions = async (roleId: number) => {
+  const { data } = await fetchRolePermissions(roleId)
+  checkedKeys.value = data
+}
+
+// 打开分配权限抽屉
+const handleAssignPermission = async (row: Role) => {
+  // 重置数据
+  checkedKeys.value = []
+  treeData.value = []
+
+  permissionDrawer.visible = true
+  permissionDrawer.title = `分配权限 - ${row.name}`
+  form.name = row.name
+  form.id = row.id
+  await getPermissionTree()
+  await getRolePermissions(row.id)
+}
+
+// 提交权限分配
+const handlePermissionSubmit = async () => {
+  if (!form.id) return
+  
+  const checkedNodes = permissionTree.value?.getCheckedKeys() || []
+  const halfCheckedNodes = permissionTree.value?.getHalfCheckedKeys() || []
+  const permissionIds = [...checkedNodes, ...halfCheckedNodes]
+  
+  const { data } = await assignPermissions({
+    roleId: form.id,
+    menuIds: permissionIds
+  })
+  
+  ElMessage.success('分配权限成功')
+  permissionDrawer.visible = false
+  getList()
 }
 
 // 初始化

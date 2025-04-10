@@ -84,3 +84,34 @@ export interface UserPageResult {
   list: User[]
   total: number
 }
+
+// 菜单类型定义
+export interface Menu {
+  id: number
+  parentId: number
+  name: string
+  type: number
+  path: string
+  component: string
+  perm: string
+  visible: number
+  sort: number
+  icon: string
+  redirect: string
+  children?: Menu[]
+}
+
+// 菜单表单类型
+export interface MenuForm {
+  id?: number
+  parentId: number
+  name: string
+  type: number
+  path: string
+  component: string
+  perm: string
+  visible: number
+  sort: number
+  icon: string
+  redirect: string
+} 
