@@ -147,7 +147,6 @@
             node-key="value"
             show-checkbox
             default-expand-all
-            :default-checked-keys="checkedKeys"
           />
         </el-form-item>
       </el-form>
@@ -162,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import { 
@@ -351,10 +350,10 @@ const handleDialogClose = () => {
 
 const treeData = ref([])
 const permissionTree = ref()
-const checkedKeys = ref<number[]>([])
 const defaultProps = {
   children: 'children',
-  label: 'label'
+  label: 'label',
+  value: 'value'
 }
 
 // 获取权限树数据
@@ -366,20 +365,28 @@ const getPermissionTree = async () => {
 // 获取角色权限
 const getRolePermissions = async (roleId: number) => {
   const { data } = await fetchRolePermissions(roleId)
-  checkedKeys.value = data
+  // 等待树形数据渲染完成
+  await nextTick()
+  // 设置选中状态
+  data.forEach((menuId: any) => {
+     permissionTree.value!.setChecked(menuId, true, false)
+  })
+ 
 }
 
 // 打开分配权限抽屉
 const handleAssignPermission = async (row: Role) => {
   // 重置数据
-  checkedKeys.value = []
   treeData.value = []
-
+  
   permissionDrawer.visible = true
   permissionDrawer.title = `分配权限 - ${row.name}`
   form.name = row.name
   form.id = row.id
+  
+  // 先获取权限树
   await getPermissionTree()
+  // 再获取角色权限
   await getRolePermissions(row.id)
 }
 

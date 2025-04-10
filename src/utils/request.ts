@@ -68,8 +68,9 @@ service.interceptors.response.use(
       const msg = response.data?.message
 
       console.log('code' + code + "|msg="+msg)
-      if (code === "A0230" ) {
+      if (code === "A0230") {
         handleSessionExpired();
+        return Promise.reject(new Error('登录状态已过期，请重新登录'))
       }
 
       let message = '系统错误'
@@ -134,6 +135,7 @@ function handleSessionExpired() {
   ElNotification({
     title: '系统提示',
     message: h('i', { style: 'color: teal' }, '登录状态已过期，请重新登录'),
+    duration: 3 * 1000
   })
   
   removeToken();
