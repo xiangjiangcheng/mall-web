@@ -110,8 +110,8 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio :label="1">正常</el-radio>
-            <el-radio :label="0">停用</el-radio>
+            <el-radio :value="1">正常</el-radio>
+            <el-radio :value="0">停用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="描述">
@@ -176,6 +176,7 @@ import {
 } from '@/api/role'
 import { getPermissionTree as fetchPermissionTree } from '@/api/menu'
 import type { Role, RoleForm } from '@/types/api'
+import type { DrawerProps } from 'element-plus'
 
 // 查询参数
 const queryParams = reactive({
@@ -196,6 +197,7 @@ const dialog = reactive({
 })
 
 // 分配权限抽屉数据
+const direction = ref<DrawerProps['direction']>('rtl')
 const permissionDrawer = reactive({
   visible: false,
   title: ''

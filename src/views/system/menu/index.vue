@@ -87,7 +87,7 @@
             :data="menuOptions"
             :props="{ label: 'name', children: 'children', value: 'id' }"
             placeholder="请选择上级菜单"
-            check-strictly=true
+            check-strictly
             clearable
             filterable
           />
@@ -97,10 +97,10 @@
         </el-form-item>
         <el-form-item label="菜单类型" prop="type">
           <el-radio-group v-model="form.type">
-            <el-radio :label="MenuTypeEnum.CATALOG">目录</el-radio>
-            <el-radio :label="MenuTypeEnum.MENU">菜单</el-radio>
-            <el-radio :label="MenuTypeEnum.EXTLINK">外链</el-radio>
-            <el-radio :label="MenuTypeEnum.BUTTON">按钮</el-radio>
+            <el-radio :value="MenuTypeEnum.CATALOG">目录</el-radio>
+            <el-radio :value="MenuTypeEnum.MENU">菜单</el-radio>
+            <el-radio :value="MenuTypeEnum.EXTLINK">外链</el-radio>
+            <el-radio :value="MenuTypeEnum.BUTTON">按钮</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item prop="routePath" v-if="form.type === MenuTypeEnum.CATALOG || form.type === MenuTypeEnum.MENU">
@@ -130,12 +130,13 @@
           <el-input v-model="form.externalLink" placeholder="请输入外链地址" />
         </el-form-item>
         <el-form-item label="菜单图标" prop="icon" v-if="form.type === MenuTypeEnum.CATALOG || form.type === MenuTypeEnum.MENU">
-          <el-input v-model="form.icon" placeholder="请输入菜单图标" />
+          <!-- 图标选择器 -->
+          <icon-select v-model="form.icon" />
         </el-form-item>
         <el-form-item label="显示状态" prop="visible">
           <el-radio-group v-model="form.visible">
-            <el-radio :label="1">显示</el-radio>
-            <el-radio :label="0">隐藏</el-radio>
+            <el-radio :value="1">显示</el-radio>
+            <el-radio :value="0">隐藏</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
@@ -162,12 +163,14 @@ import type { FormInstance } from 'element-plus'
 import { getMenuList, getMenuDetail, addMenu, updateMenu, deleteMenu } from '@/api/menu'
 import type { Menu, MenuForm } from '@/types/api'
 import { MenuTypeEnum } from '@/enums/menu.enum'
-
+import IconSelect from '@/components/IconSelect.vue'
+import type { DrawerProps } from 'element-plus'
 // 菜单列表数据
 const menuList = ref<Menu[]>([])
 const loading = ref(false)
 
 // 抽屉数据
+const direction = ref<DrawerProps['direction']>('rtl')
 const drawer = reactive({
   visible: false,
   title: ''

@@ -150,6 +150,7 @@ import type { FormInstance } from 'element-plus'
 import { getUserList, getUserDetail, addUser, updateUser, deleteUser, updateUserStatus } from '@/api/user'
 import { getRoleList } from '@/api/role'
 import type { User, UserForm, Role } from '@/types/api'
+import type { DrawerProps } from 'element-plus'
 
 // 查询参数
 const queryParams = reactive({
@@ -167,6 +168,7 @@ const loading = ref(false)
 const roleOptions = ref<Role[]>([])
 
 // 对话框数据
+const direction = ref<DrawerProps['direction']>('rtl')
 const dialog = reactive({
   visible: false,
   title: ''
