@@ -90,8 +90,8 @@ export interface Menu {
   id: number
   parentId: number
   name: string
-  type: number
-  path: string
+  type: MenuTypeEnum
+  routePath: string
   component: string
   perm: string
   visible: number
@@ -106,8 +106,8 @@ export interface MenuForm {
   id?: number
   parentId: number
   name: string
-  type: number
-  path: string
+  type: MenuTypeEnum
+  routePath: string
   component: string
   perm: string
   visible: number

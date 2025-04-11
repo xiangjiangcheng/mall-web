@@ -2,6 +2,13 @@
   <div class="app-wrapper">
     <!-- 侧边栏 -->
     <div class="sidebar-container">
+       <!-- logo + 系统名称  -->
+      <div class="logo-container">
+        <div class="logo-wrapper">
+          <img src="@/assets/logo.png" alt="logo" class="logo">
+          <span class="system-name">商城后台管理系统</span>
+        </div>
+      </div>
       <el-menu
         :default-active="route.path"
         class="el-menu-vertical"
@@ -130,6 +137,38 @@ const handleLogout = () => {
     background-color: #304156;
     transition: width 0.3s;
     
+    .logo-container {
+      height: 60px;
+      background-color: #304156;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      .logo-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 0 15px;
+
+        .logo {
+          width: 32px;
+          height: 32px;
+          margin-right: 12px;
+        }
+
+        .system-name {
+          color: #fff;
+          font-size: 16px;
+          font-weight: 600;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
     .el-menu {
       border-right: none;
       

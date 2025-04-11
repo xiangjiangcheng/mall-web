@@ -24,12 +24,13 @@
         </el-table-column>
         <el-table-column prop="type" label="类型" width="100">
           <template #default="scope">
-            <el-tag v-if="scope.row.type === 1" type="success">目录</el-tag>
-            <el-tag v-else-if="scope.row.type === 2" type="warning">菜单</el-tag>
+            <el-tag v-if="scope.row.type === MenuTypeEnum.CATALOG" type="success">目录</el-tag>
+            <el-tag v-else-if="scope.row.type === MenuTypeEnum.MENU" type="warning">菜单</el-tag>
+            <el-tag v-else-if="scope.row.type === MenuTypeEnum.EXTLINK" type="info">外链</el-tag>
             <el-tag v-else type="info">按钮</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="path" label="路由路径" />
+        <el-table-column prop="routePath" label="路由路径" />
         <el-table-column prop="component" label="组件路径" />
         <el-table-column prop="perm" label="权限标识" />
         <el-table-column prop="sort" label="排序" width="80" />
@@ -73,7 +74,6 @@
       v-model="drawer.visible"
       :title="drawer.title"
       :direction="direction"
-      size="50%"
     >
       <el-form
         ref="formRef"
@@ -85,31 +85,51 @@
           <el-tree-select
             v-model="form.parentId"
             :data="menuOptions"
-            :props="{ label: 'name', children: 'children' }"
+            :props="{ label: 'name', children: 'children', value: 'id' }"
             placeholder="请选择上级菜单"
-            check-strictly
+            check-strictly=true
+            clearable
+            filterable
           />
-        </el-form-item>
-        <el-form-item label="菜单类型" prop="type">
-          <el-radio-group v-model="form.type">
-            <el-radio :label="1">目录</el-radio>
-            <el-radio :label="2">菜单</el-radio>
-            <el-radio :label="3">按钮</el-radio>
-          </el-radio-group>
         </el-form-item>
         <el-form-item label="菜单名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入菜单名称" />
         </el-form-item>
-        <el-form-item label="路由路径" prop="path" v-if="form.type !== 3">
-          <el-input v-model="form.path" placeholder="请输入路由路径" />
+        <el-form-item label="菜单类型" prop="type">
+          <el-radio-group v-model="form.type">
+            <el-radio :label="MenuTypeEnum.CATALOG">目录</el-radio>
+            <el-radio :label="MenuTypeEnum.MENU">菜单</el-radio>
+            <el-radio :label="MenuTypeEnum.EXTLINK">外链</el-radio>
+            <el-radio :label="MenuTypeEnum.BUTTON">按钮</el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item label="组件路径" prop="component" v-if="form.type === 2">
-          <el-input v-model="form.component" placeholder="请输入组件路径" />
+        <el-form-item prop="routePath" v-if="form.type === MenuTypeEnum.CATALOG || form.type === MenuTypeEnum.MENU">
+          <template #label>
+            <div class="flex-y-center">
+              路由路径
+              <el-tooltip placement="bottom" effect="light">
+                <template #content>
+                  定义应用中不同页面对应的 URL 路径，目录需以 / 开头，菜单项不用。例如：系统管理目录
+                  /system，系统管理下的用户管理菜单 user。
+                </template>
+                <el-icon class="ml-1 cursor-pointer">
+                  <QuestionFilled />
+                </el-icon>
+              </el-tooltip>
+            </div>
+          </template>
+          <el-input v-model="form.routePath" placeholder="请输入路由路径如：/system" />
         </el-form-item>
-        <el-form-item label="权限标识" prop="perm" v-if="form.type === 3">
-          <el-input v-model="form.perm" placeholder="请输入权限标识" />
+        <el-form-item label="组件路径" prop="component" v-if="form.type === MenuTypeEnum.MENU">
+          <el-input v-model="form.component" placeholder="请输入组件路径, 如：system/user/index" />
         </el-form-item>
-        <el-form-item label="菜单图标" prop="icon" v-if="form.type !== 3">
+        <el-form-item label="权限标识" prop="perm"  v-if="form.type === MenuTypeEnum.BUTTON">
+          <el-input v-model="form.perm" placeholder="请输入权限标识, 如：sys:user:list" />
+        </el-form-item>
+        <el-form-item label="外链地址" prop="externalLink" v-if="form.type === MenuTypeEnum.EXTLINK">
+          <el-input v-model="form.externalLink" placeholder="请输入外链地址" />
+        </el-form-item>
+        <el-form-item label="菜单图标" prop="icon" v-if="form.type === MenuTypeEnum.CATALOG || form.type === MenuTypeEnum.MENU">
           <el-input v-model="form.icon" placeholder="请输入菜单图标" />
         </el-form-item>
         <el-form-item label="显示状态" prop="visible">
@@ -121,7 +141,7 @@
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" :min="0" />
         </el-form-item>
-        <el-form-item label="重定向" prop="redirect" v-if="form.type === 1">
+        <el-form-item label="重定向" prop="redirect" v-if="form.type === MenuTypeEnum.MENU">
           <el-input v-model="form.redirect" placeholder="请输入重定向路径" />
         </el-form-item>
       </el-form>
@@ -141,6 +161,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import { getMenuList, getMenuDetail, addMenu, updateMenu, deleteMenu } from '@/api/menu'
 import type { Menu, MenuForm } from '@/types/api'
+import { MenuTypeEnum } from '@/enums/menu.enum'
 
 // 菜单列表数据
 const menuList = ref<Menu[]>([])
@@ -156,8 +177,8 @@ const drawer = reactive({
 const form = reactive<MenuForm>({
   parentId: 0,
   name: '',
-  type: 1,
-  path: '',
+  type: MenuTypeEnum.CATALOG,
+  routePath: '',
   component: '',
   perm: '',
   visible: 1,
@@ -174,7 +195,7 @@ const rules = {
   type: [
     { required: true, message: '请选择菜单类型', trigger: 'change' }
   ],
-  path: [
+  routePath: [
     { required: true, message: '请输入路由路径', trigger: 'blur' }
   ],
   component: [
@@ -200,8 +221,8 @@ const menuOptions = ref<Menu[]>([
     id: 0,
     parentId: 0,
     name: '主目录',
-    type: 1,
-    path: '',
+    type: MenuTypeEnum.CATALOG,
+    routePath: '',
     component: '',
     perm: '',
     visible: 1,
@@ -240,8 +261,8 @@ const handleAdd = (row?: Menu) => {
     id: undefined,
     parentId: row?.id || 0,
     name: '',
-    type: 1,
-    path: '',
+    type: MenuTypeEnum.CATALOG,
+    routePath: '',
     component: '',
     perm: '',
     visible: 1,

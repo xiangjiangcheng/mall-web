@@ -217,6 +217,12 @@ document.addEventListener('click', () => {
 })
 </script>
 
+<script lang="ts">
+export default {
+  name: 'TabsView'
+}
+</script>
+
 <style lang="scss" scoped>
 .tabs-view {
   position: relative;

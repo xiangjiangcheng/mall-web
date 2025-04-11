@@ -65,7 +65,7 @@ export default defineConfig(({ command, mode }) => {
     server: {
       host: '0.0.0.0',
       port: 3000,
-      open: true, // 自动打开浏览器
+      open: false, // 自动打开浏览器
       // 反向代理解决跨域
       proxy: env.VITE_APP_USE_PROXY === 'true' ? {
         // 代理以/dev-api开头的请求

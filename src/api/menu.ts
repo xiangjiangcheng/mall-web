@@ -20,7 +20,7 @@ export function getMenuList() {
  * 获取菜单详情
  */
 export function getMenuDetail(id: number) {
-  return get(`${MENU_BASE_URL}/${id}`)
+  return get(`${MENU_BASE_URL}/${id}/form`)
 }
 
 /**
