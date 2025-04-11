@@ -1,13 +1,9 @@
 import { defineStore } from 'pinia'
 import type { TabItem, TabsState } from '@/types/tabs'
 
-const TABS_KEY = 'visited_tabs'
-
 export const useTabsStore = defineStore('tabs', {
   state: (): TabsState => {
-    // 从 localStorage 获取已保存的标签页
-    const savedTabs = localStorage.getItem(TABS_KEY)
-    const visitedTabs = savedTabs ? JSON.parse(savedTabs) : []
+    const visitedTabs: TabItem[] = []
     
     return {
       visitedTabs,
@@ -25,7 +21,6 @@ export const useTabsStore = defineStore('tabs', {
       if (tab.name) {
         this.cachedTabs.push(tab.name)
       }
-      this.saveTabs()
     },
     
     // 删除标签页
@@ -39,7 +34,6 @@ export const useTabsStore = defineStore('tabs', {
             this.cachedTabs.splice(cachedIndex, 1)
           }
         }
-        this.saveTabs()
       }
     },
     
@@ -49,7 +43,6 @@ export const useTabsStore = defineStore('tabs', {
         (item) => item.path === '/dashboard' || item.path === tab.path
       )
       this.cachedTabs = this.visitedTabs.map(tab => tab.name).filter(Boolean)
-      this.saveTabs()
     },
     
     // 关闭所有标签页
@@ -61,7 +54,6 @@ export const useTabsStore = defineStore('tabs', {
         this.visitedTabs = []
       }
       this.cachedTabs = this.visitedTabs.map(tab => tab.name).filter(Boolean)
-      this.saveTabs()
     },
     
     // 刷新标签页
@@ -69,13 +61,10 @@ export const useTabsStore = defineStore('tabs', {
       return tab.fullPath
     },
 
-    // 保存标签页到 localStorage
-    saveTabs() {
-      localStorage.setItem(TABS_KEY, JSON.stringify(this.visitedTabs))
-    },
 
     // 初始化首页标签
     initHomeTab(tab: TabItem) {
+      console.log('initHomeTab', tab)
       if (!this.visitedTabs.some(v => v.path === '/dashboard')) {
         this.addTab(tab)
       }
