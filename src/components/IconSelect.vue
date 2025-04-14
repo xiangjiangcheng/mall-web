@@ -1,5 +1,11 @@
 <template>
+
   <div class="icon-select">
+    <el-icon v-if="props.modelValue">
+      <component :is="props.modelValue" />
+    </el-icon>
+  
+    <label v-else>请选择图标</label>
     <el-input v-model="search" placeholder="搜索图标" />
     <div class="icon-list">
       <div
@@ -8,45 +14,48 @@
         class="icon-item"
         @click="selectIcon(icon)"
       >
-        <el-icon :component="getIconComponent(icon)" />
-        <span>{{ icon }}</span>
+        <el-icon>
+          <component :is="getIconComponent(icon)" />
+        </el-icon>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-export default {
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    }
-  },
-  data() {
-    return {
-      search: '',
-      icons: Object.keys(ElementPlusIconsVue),
-    }
-  },
-  computed: {
-    filteredIcons() {
-      return this.icons.filter(icon => icon.includes(this.search))
-    }
-  },
-  methods: {
-    getIconComponent(icon) {
-      return ElementPlusIconsVue[icon]
-    },
-    selectIcon(icon) {
-      this.$emit('update:modelValue', icon)
-    }
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: ''
   }
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const search = ref('')
+const icons = ref(Object.keys(ElementPlusIconsVue))
+
+const filteredIcons = computed(() => {
+  const result = icons.value.filter(icon => icon.includes(search.value))
+  return result
+})
+
+const getIconComponent = (icon: string) => {
+  return ElementPlusIconsVue[icon as keyof typeof ElementPlusIconsVue]
+}
+
+const selectIcon = (icon: string) => {
+  emit('update:modelValue', icon)
 }
 </script>
-
+<script lang="ts">
+  export default {
+    name: 'IconSelect'
+  }
+</script>
 <style scoped>
 .icon-select {
   max-height: 300px;

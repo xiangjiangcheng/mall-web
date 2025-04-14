@@ -19,12 +19,14 @@ export interface UserInfo {
 interface UserState {
   token: string
   userInfo: UserInfo | null
+  menus: any[]
 }
 
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     token: getToken() || '',
-    userInfo: getStoredUserInfo()
+    userInfo: getStoredUserInfo(),
+    menus: []
   }),
   
   getters: {
@@ -49,10 +51,16 @@ export const useUserStore = defineStore('user', {
       setStoredUserInfo(userInfo)
     },
     
+    // 设置菜单
+    setMenus(menus: any[]) {
+      this.menus = menus
+    },
+    
     // 重置状态
     resetState() {
       this.token = ''
       this.userInfo = null
+      this.menus = []
       removeToken()
       removeUserInfo()
       useTabsStore().closeAllTabs()

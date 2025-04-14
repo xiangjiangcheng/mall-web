@@ -1,7 +1,9 @@
 <script setup>
 import { useCounterStore } from '@/stores/counter'
+import { useRoute } from 'vue-router'
 
 const counterStore = useCounterStore()
+const route = useRoute()
 </script>
 
 <template>
@@ -22,7 +24,12 @@ const counterStore = useCounterStore()
     <!-- API 示例组件 -->
     <!-- <Login /> -->
   <!-- </div> -->
-  <router-view />
+  <router-view v-slot="{ Component, route }">
+    <keep-alive>
+      <component :is="Component" v-if="route.meta?.keepAlive" />
+    </keep-alive>
+    <component :is="Component" v-if="!route.meta?.keepAlive" />
+  </router-view>
 </template>
   
 <style scoped>

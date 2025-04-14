@@ -1,47 +1,7 @@
 <template>
   <div class="app-wrapper">
     <!-- 侧边栏 -->
-    <div class="sidebar-container">
-       <!-- logo + 系统名称  -->
-      <div class="logo-container">
-        <div class="logo-wrapper">
-          <img src="@/assets/logo.png" alt="logo" class="logo">
-          <span class="system-name">商城后台管理系统</span>
-        </div>
-      </div>
-      <el-menu
-        :default-active="route.path"
-        class="el-menu-vertical"
-        :router="true"
-        background-color="#304156"
-        text-color="#bfcbd9"
-        active-text-color="#409EFF"
-      >
-        <el-menu-item index="/dashboard">
-          <el-icon><Monitor /></el-icon>
-          <span>首页</span>
-        </el-menu-item>
-        
-        <el-sub-menu index="/system">
-          <template #title>
-            <el-icon><Setting /></el-icon>
-            <span>系统管理</span>
-          </template>
-          <el-menu-item index="/system/user">
-            <el-icon><User /></el-icon>
-            <span>用户管理</span>
-          </el-menu-item>
-          <el-menu-item index="/system/role">
-            <el-icon><UserFilled /></el-icon>
-            <span>角色管理</span>
-          </el-menu-item>
-          <el-menu-item index="/system/menu">
-            <el-icon><UserFilled /></el-icon>
-            <span>菜单管理</span>
-          </el-menu-item>
-        </el-sub-menu>
-      </el-menu>
-    </div>
+    <Sidebar />
 
     <!-- 主容器 -->
     <div class="main-container">
@@ -80,11 +40,11 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { Monitor, Setting, User, UserFilled } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/stores/user'
 import { useTabsStore } from '@/stores/tabs'
 import TabsView from '@/components/TabsView/index.vue'
+import Sidebar from '@/layout/components/Sidebar/index.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -131,58 +91,6 @@ const handleLogout = () => {
 .app-wrapper {
   display: flex;
   height: 100vh;
-  
-  .sidebar-container {
-    width: 210px;
-    background-color: #304156;
-    transition: width 0.3s;
-    
-    .logo-container {
-      height: 60px;
-      background-color: #304156;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-      .logo-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 0 15px;
-
-        .logo {
-          width: 32px;
-          height: 32px;
-          margin-right: 12px;
-        }
-
-        .system-name {
-          color: #fff;
-          font-size: 16px;
-          font-weight: 600;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-      }
-    }
-
-    .el-menu {
-      border-right: none;
-      
-      .el-menu-item, .el-sub-menu__title {
-        &:hover {
-          background-color: #263445;
-        }
-        
-        &.is-active {
-          background-color: #263445;
-        }
-      }
-    }
-  }
   
   .main-container {
     flex: 1;

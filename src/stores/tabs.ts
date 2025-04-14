@@ -47,7 +47,6 @@ export const useTabsStore = defineStore('tabs', {
     
     // 关闭所有标签页
     closeAllTabs(keepHome = false) {
-      console.log('closeAllTabs', keepHome) 
       if (keepHome) {
         this.visitedTabs = this.visitedTabs.filter((item) => item.path === '/dashboard')
       } else {
@@ -64,7 +63,6 @@ export const useTabsStore = defineStore('tabs', {
 
     // 初始化首页标签
     initHomeTab(tab: TabItem) {
-      console.log('initHomeTab', tab)
       if (!this.visitedTabs.some(v => v.path === '/dashboard')) {
         this.addTab(tab)
       }

@@ -66,8 +66,6 @@ service.interceptors.response.use(
       const { status } = response
       const code = response.data?.code
       const msg = response.data?.message
-
-      console.log('code' + code + "|msg="+msg)
       if (code === "A0230") {
         handleSessionExpired();
         return Promise.reject(new Error('登录状态已过期，请重新登录'))

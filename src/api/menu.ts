@@ -43,3 +43,10 @@ export function updateMenu(id: number, data: MenuForm) {
 export function deleteMenu(id: number) {
   return del(`${MENU_BASE_URL}/${id}`)
 } 
+
+/**
+ * 获取菜单路由列表
+ */
+export function routes() {
+  return get(`${MENU_BASE_URL}/routes`)
+} 

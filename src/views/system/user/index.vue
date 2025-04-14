@@ -322,7 +322,6 @@ const handleStatusChange = async (row: User) => {
 const handleSubmit = async () => {
   if (!dialogForm.value) return
   
-  console.log("handleSubmit: " + JSON.stringify(form))
   await dialogForm.value.validate(async (valid) => {
     if (valid) {
       try {
