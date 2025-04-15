@@ -5,7 +5,7 @@ import { getToken, setToken, removeToken, getUserInfo as getStoredUserInfo, setU
 import type { LoginParams } from '@/types/login'
 import { useTabsStore } from '@/stores/tabs'
 import { routes } from '@/api/menu'
-import { addRoutes } from '@/stores/permission'
+import { usePermissionStore } from '@/stores/permission'
 
 export interface UserInfo {
   id: number
@@ -80,8 +80,8 @@ export const useUserStore = defineStore('user', {
       if (this.hasLoadedRoutes) return
       try {
         const { data } = await routes()
-        addRoutes(data)
-        this.setMenus(data)
+        usePermissionStore().addRoutes(data)
+        // this.setMenus(data)
         this.hasLoadedRoutes = true
       } catch (error) {
         console.error('Failed to load dynamic routes:', error)

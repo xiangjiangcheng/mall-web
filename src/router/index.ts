@@ -9,7 +9,7 @@ import Layout from '@/layout/index.vue'
 const whiteList = ['/login']
 
 // 基础路由
-const constantRoutes: RouteRecordRaw[] = [
+export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/redirect',
     component: Layout,
@@ -34,7 +34,12 @@ const constantRoutes: RouteRecordRaw[] = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index.vue'),
         name: 'Dashboard',
-        meta: { title: '首页', icon: 'Monitor' }
+        meta: { 
+          title: '首页', 
+          icon: 'Monitor',
+          affix: true,
+          keepAlive: true
+        }
       },
       {
         path: 'profile',
