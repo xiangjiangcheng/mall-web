@@ -121,7 +121,6 @@ const contextMenuStyle = ref({
 
 // 计算面包屑导航
 const breadcrumbs = computed(() => {
-  console.log("breadcrumbs: " + route.matched)
   const matched = route.matched
   return matched.map(item => ({
     path: item.path,

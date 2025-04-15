@@ -4,6 +4,8 @@ import { getUserInfo, updateUserInfo as updateUserInfoApi } from '@/api/user'
 import { getToken, setToken, removeToken, getUserInfo as getStoredUserInfo, setUserInfo as setStoredUserInfo, removeUserInfo } from '@/utils/auth'
 import type { LoginParams } from '@/types/login'
 import { useTabsStore } from '@/stores/tabs'
+import { routes } from '@/api/menu'
+import { addRoutes } from '@/stores/permission'
 
 export interface UserInfo {
   id: number
@@ -20,13 +22,15 @@ interface UserState {
   token: string
   userInfo: UserInfo | null
   menus: any[]
+  hasLoadedRoutes: boolean
 }
 
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     token: getToken() || '',
     userInfo: getStoredUserInfo(),
-    menus: []
+    menus: [],
+    hasLoadedRoutes: false
   }),
   
   getters: {
@@ -56,14 +60,33 @@ export const useUserStore = defineStore('user', {
       this.menus = menus
     },
     
+    // 设置路由加载状态
+    setHasLoadedRoutes(value: boolean) {
+      this.hasLoadedRoutes = value
+    },
+    
     // 重置状态
     resetState() {
       this.token = ''
       this.userInfo = null
       this.menus = []
+      this.hasLoadedRoutes = false
       removeToken()
       removeUserInfo()
       useTabsStore().closeAllTabs()
+    },
+
+    async loadDynamicRoutes() {
+      if (this.hasLoadedRoutes) return
+      try {
+        const { data } = await routes()
+        addRoutes(data)
+        this.setMenus(data)
+        this.hasLoadedRoutes = true
+      } catch (error) {
+        console.error('Failed to load dynamic routes:', error)
+        throw error
+      }
     },
 
     // 登录
