@@ -20,19 +20,19 @@ const constantRoutes: RouteRecordRaw[] = [
 
 export const usePermissionStore = defineStore("permission", () => {
   // 储所有路由，包括静态路由和动态路由
-  const routes = ref<RouteRecordRaw[]>([]);
+  let routes: RouteRecordRaw[] = [];
 
   // 添加动态路由
   function addRoutes(routesData: any[]) {
     const dynamicRoutes = generateRoutes(routesData)
 
-    routes.value = [...constantRoutes, ...dynamicRoutes];
+    routes = [...constantRoutes, ...dynamicRoutes];
 
-    routes.value.forEach(route => {
+    routes.forEach(route => {
       router.addRoute(route)
     })
     const userStore = useUserStore();
-    userStore.setMenus(routes.value)
+    userStore.setMenus(routes)
   }
 
   /**
@@ -73,7 +73,6 @@ export const usePermissionStore = defineStore("permission", () => {
   };
   
   return {
-    routes,
     addRoutes,
   };
 })
