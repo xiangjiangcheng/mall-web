@@ -18,7 +18,7 @@
     <el-card shadow="never">
       <div class="mb-10px">
         <el-button
-            v-hasPerm="['system:category:add']"
+            v-hasPerm="['sys:category:add']"
             type="success"
             @click="handleOpenDialog()"
         >
@@ -26,7 +26,7 @@
           新增
         </el-button>
         <el-button
-            v-hasPerm="['system:category:delete']"
+            v-hasPerm="['sys:category:delete']"
             type="danger"
             :disabled="removeIds.length === 0"
             @click="handleDelete()"
@@ -47,39 +47,43 @@
         <el-table-column type="selection" width="55" align="center" />
                     <el-table-column
                         key="id"
-                        label=""
+                        label="序号"
                         prop="id"
                         min-width="150"
                         align="center"
                     />
                     <el-table-column
                         key="shopId"
-                        label=""
+                        label="店铺ID"
                         prop="shopId"
                         min-width="150"
                         align="center"
                     />
                     <el-table-column
                         key="name"
-                        label=""
+                        label="分类名称"
                         prop="name"
                         min-width="150"
                         align="center"
                     />
                     <el-table-column
                         key="sort"
-                        label=""
+                        label="排序"
                         prop="sort"
                         min-width="150"
                         align="center"
                     />
                     <el-table-column
                         key="status"
-                        label="1-显示 0-隐藏"
+                        label="状态"
                         prop="status"
                         min-width="150"
                         align="center"
-                    />
+                    >
+                      <template #default="scope">
+                       {{ scope.row.status === 1 ? '显示' : '隐藏' }}
+                      </template>
+                    </el-table-column>
                     <el-table-column
                         key="createTime"
                         label="创建时间"
@@ -90,7 +94,7 @@
         <el-table-column fixed="right" label="操作" width="220">
           <template #default="scope">
             <el-button
-                v-hasPerm="['system:category:edit']"
+                v-hasPerm="['sys:category:edit']"
                 type="primary"
                 size="small"
                 link
@@ -100,7 +104,7 @@
               编辑
             </el-button>
             <el-button
-                v-hasPerm="['system:category:delete']"
+                v-hasPerm="['sys:category:delete']"
                 type="danger"
                 size="small"
                 link
@@ -123,46 +127,39 @@
     </el-card>
 
     <!-- 分类表单弹窗 -->
-    <el-dialog
+    <el-drawer
         v-model="dialog.visible"
         :title="dialog.title"
-        width="500px"
+        :direction="direction"
         @close="handleCloseDialog"
     >
       <el-form ref="dataFormRef" :model="formData" :rules="rules" label-width="100px">
-                <el-form-item label="" prop="id">
-                      <el-input
-                          v-model="formData.id"
-                          placeholder=""
-                      />
-                </el-form-item>
-
-                <el-form-item label="" prop="shopId">
+                <el-form-item label="店铺ID" prop="shopId">
                       <el-input
                           v-model="formData.shopId"
-                          placeholder=""
+                          placeholder="请输入店铺ID,当前默认1"
                       />
                 </el-form-item>
 
-                <el-form-item label="" prop="name">
+                <el-form-item label="分类名称" prop="name">
                       <el-input
                           v-model="formData.name"
-                          placeholder=""
+                          placeholder="请输入分类名称"
                       />
                 </el-form-item>
 
-                <el-form-item label="" prop="sort">
+                <el-form-item label="排序" prop="sort">
                       <el-input
                           v-model="formData.sort"
-                          placeholder=""
+                          placeholder="请输入1,2,3..."
                       />
                 </el-form-item>
 
-                <el-form-item label="1-显示 0-隐藏" prop="status">
-                      <el-input
-                          v-model="formData.status"
-                          placeholder="1-显示 0-隐藏"
-                      />
+                <el-form-item label="状态" prop="status">
+                  <el-radio-group v-model="formData.status">
+                    <el-radio :value="1">显示</el-radio>
+                    <el-radio :value="0">隐藏</el-radio>
+                  </el-radio-group>
                 </el-form-item>
 
       </el-form>
@@ -172,7 +169,7 @@
           <el-button @click="handleCloseDialog()">取消</el-button>
         </div>
       </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
@@ -183,6 +180,7 @@
   });
 
   import CategoryAPI, { CategoryPageVO, CategoryForm, CategoryPageQuery } from "@/api/system/category";
+  import type { DrawerProps } from 'element-plus'
 
   const queryFormRef = ref(ElForm);
   const dataFormRef = ref(ElForm);
@@ -191,6 +189,8 @@
   const removeIds = ref<number[]>([]);
   const total = ref(0);
 
+  // 对话框数据
+  const direction = ref<DrawerProps['direction']>('rtl')
   const queryParams = reactive<CategoryPageQuery>({
     pageNum: 1,
     pageSize: 10,
@@ -206,13 +206,17 @@
   });
 
   // 分类表单数据
-  const formData = reactive<CategoryForm>({});
+  const formData = reactive<CategoryForm>({
+    status: 1,
+    sort: 0,
+    shopId: 1
+  });
 
   // 分类表单校验规则
   const rules = reactive({
-                      id: [{ required: true, message: "请输入", trigger: "blur" }],
-                      shopId: [{ required: true, message: "请输入", trigger: "blur" }],
-                      name: [{ required: true, message: "请输入", trigger: "blur" }],
+                      id: [{ required: true, message: "请输入分类ID", trigger: "blur" }],
+                      shopId: [{ required: true, message: "请输入店铺ID", trigger: "blur" }],
+                      name: [{ required: true, message: "请输入分类名称", trigger: "blur" }],
   });
 
   /** 查询分类 */

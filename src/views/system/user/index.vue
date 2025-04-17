@@ -226,8 +226,8 @@ const getList = async () => {
 
 // 获取用户详情
 const getDetail = async(id: number) => {
-  return await getUserDetail(id).then(res => {
-    return res.data
+  return await getUserDetail(id).then(data => {
+    return data
   })
 }
 
