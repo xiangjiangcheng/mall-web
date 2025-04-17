@@ -76,7 +76,7 @@ router.beforeEach(async (to, from, next) => {
           next({ ...to, replace: true })
           return
         } catch (error) {
-          ElMessage.error('获取动态路由失败，请重新登录')
+          // ElMessage.error('获取动态路由失败，请重新登录')
           userStore.resetState()
           next(`/login?redirect=${to.path}`)
         }

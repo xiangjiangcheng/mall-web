@@ -34,6 +34,8 @@ declare global {
     value: string | number;
     /** 文本 */
     label: string;
+    /** 标签类型 */
+    tag?: string;
     /** 子列表  */
     children?: OptionType[];
   }
