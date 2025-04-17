@@ -32,7 +32,8 @@ export default defineConfig(({ command, mode }) => {
           // 自动导入图标组件
           IconsResolver({}),
         ],
-        imports: ['vue', 'vue-router', 'pinia'],
+        // 导入 Vue 函数，如：ref, reactive, toRef 等
+        imports: ["vue", "@vueuse/core", "pinia", "vue-router", "vue-i18n"],
         dts: path.resolve(pathSrc, "types", "auto-imports.d.ts"), // 指定自动导入函数TS类型声明文件路径
       }),
       Components({
@@ -44,7 +45,9 @@ export default defineConfig(({ command, mode }) => {
             enabledCollections: ["ep"] // element-plus图标库，其他图标库 https://icon-sets.iconify.design/
           }),
         ],
-        dts: path.resolve(pathSrc, "types", "components.d.ts"), // 指定自动导入组件TS类型声明文件路径
+        // dts: path.resolve(pathSrc, "types", "components.d.ts"), // 指定自动导入组件TS类型声明文件路径
+        // 指定自定义组件位置(默认:src/components)
+        dirs: ["src/components", "src/**/components"],
       }),
       Icons({
         // 自动安装图标库
