@@ -50,3 +50,12 @@ export function deleteMenu(id: number) {
 export function routes() {
   return get(`${MENU_BASE_URL}/routes`)
 } 
+
+  /**
+   * 获取菜单下拉数据源
+   *
+   * @returns 菜单下拉数据源
+   */
+export function getOptions(onlyParent?: boolean) {
+  return get(`${MENU_BASE_URL}/options`, { onlyParent: onlyParent })
+}

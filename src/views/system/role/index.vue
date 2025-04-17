@@ -235,7 +235,7 @@ const dialogForm = ref<FormInstance>()
 const getList = async () => {
   loading.value = true
   try {
-    const { data } = await getRoleList(queryParams)
+    const data = await getRoleList(queryParams)
     roleList.value = data.list
     total.value = data.total
   } catch (error) {
@@ -247,7 +247,7 @@ const getList = async () => {
 
 // 获取角色详情
 const getDetail = async (id: number) => {
-  const { data } = await getRoleDetail(id)
+  const data = await getRoleDetail(id)
   return data
 }
 
@@ -360,13 +360,13 @@ const defaultProps = {
 
 // 获取权限树数据
 const getPermissionTree = async () => {
-  const { data } = await fetchPermissionTree()
+  const data = await fetchPermissionTree()
   treeData.value = data
 }
 
 // 获取角色权限
 const getRolePermissions = async (roleId: number) => {
-  const { data } = await fetchRolePermissions(roleId)
+  const data = await fetchRolePermissions(roleId)
   // 等待树形数据渲染完成
   await nextTick()
   // 设置选中状态
@@ -400,7 +400,7 @@ const handlePermissionSubmit = async () => {
   const halfCheckedNodes = permissionTree.value?.getHalfCheckedKeys() || []
   const permissionIds = [...checkedNodes, ...halfCheckedNodes]
   
-  const { data } = await assignPermissions({
+  const data = await assignPermissions({
     roleId: form.id,
     menuIds: permissionIds
   })
@@ -418,7 +418,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .app-container {
-  padding: 20px;
+  padding: 2px;
   
   .search-wrapper {
     margin-bottom: 20px;

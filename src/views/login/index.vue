@@ -62,14 +62,14 @@ const loginRules = {
 // 获取验证码
 const getCaptcha = async () => {
   try {
-    const res = await userStore.getCaptchaAction()
-    if (res?.data) {
-      captchaBase64.value = res.data.captchaBase64
-      loginForm.captchaKey = res.data.captchaKey
+    const data = await userStore.getCaptchaAction()
+    if (data) {
+      captchaBase64.value = data.captchaBase64
+      loginForm.captchaKey = data.captchaKey
     }
   } catch (error) {
     console.error('获取验证码失败:', error)
-    ElMessage.error('获取验证码失败')
+    // ElMessage.error('获取验证码失败')
   }
 }
 

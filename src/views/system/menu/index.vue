@@ -240,7 +240,7 @@ const menuOptions = ref<Menu[]>([
 const getList = async () => {
   loading.value = true
   try {
-    const { data } = await getMenuList()
+    const data = await getMenuList()
     menuList.value = data
     menuOptions.value[0].children = data
   } catch (error) {
@@ -252,7 +252,7 @@ const getList = async () => {
 
 // 获取菜单详情
 const getDetail = async (id: number) => {
-  const { data } = await getMenuDetail(id)
+  const data = await getMenuDetail(id)
   return data
 }
 
@@ -328,7 +328,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .app-container {
-  padding: 20px;
+  padding: 2px;
   
   .table-wrapper {
     margin-bottom: 20px;

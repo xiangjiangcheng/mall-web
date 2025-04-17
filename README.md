@@ -9,6 +9,9 @@
 # 技术栈
 Vue3 + Vite + TypeScript + Element-Plus：从零到一构建企业级后台管理系统
 
+
+-- npm i sortablejs @types/sortablejs 拖拽
+
 # DOC
 1.unocss查找： https://unocss.dev/interactive/
 

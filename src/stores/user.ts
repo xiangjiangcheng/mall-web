@@ -79,7 +79,7 @@ export const useUserStore = defineStore('user', {
     async loadDynamicRoutes() {
       if (this.hasLoadedRoutes) return
       try {
-        const { data } = await routes()
+        const data = await routes()
         usePermissionStore().addRoutes(data)
         // this.setMenus(data)
         this.hasLoadedRoutes = true
@@ -98,7 +98,7 @@ export const useUserStore = defineStore('user', {
         if (loginParams.captchaKey) formData.append('captchaKey', loginParams.captchaKey)
         if (loginParams.captchaCode) formData.append('captchaCode', loginParams.captchaCode)
         
-        const { data } = await login(formData)
+        const data = await login(formData)
         const { accessToken } = data
         this.setToken(`${accessToken}`)
         // 登录成功之后，获取用户信息
@@ -113,7 +113,7 @@ export const useUserStore = defineStore('user', {
     // 获取用户信息
     async getUserInfoAction() {
       try {
-        const { data } = await getUserInfo()
+        const data = await getUserInfo()
         this.setUserInfo(data)
         return data
       } catch (error) {
@@ -144,7 +144,7 @@ export const useUserStore = defineStore('user', {
     // 更新用户信息
     async updateUserInfo(userInfo: Partial<UserInfo>) {
       try {
-        const { data } = await updateUserInfoApi(this.userInfo!.id, userInfo)
+        const data = await updateUserInfoApi(this.userInfo!.id, userInfo)
         this.setUserInfo({ ...this.userInfo, ...data } as UserInfo)
         return data
       } catch (error) {

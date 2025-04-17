@@ -135,7 +135,7 @@ const handleSubmit = async () => {
 
 <style lang="scss" scoped>
 .profile-container {
-  padding: 20px;
+  padding: 2px;
   
   .profile-form {
     max-width: 600px;

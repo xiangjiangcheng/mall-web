@@ -3,6 +3,7 @@ import App from './App.vue'
 import pinia from './stores'
 import router from './router'
 import 'virtual:uno.css'
+import { InstallCodeMirror } from "codemirror-editor-vue3"; 
 
 // 导入 Element Plus 样式
 import 'element-plus/dist/index.css'
@@ -21,4 +22,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // 注册 pinia
 app.use(pinia)
 app.use(router)
+app.use(InstallCodeMirror); 
 app.mount('#app') 

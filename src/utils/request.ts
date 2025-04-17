@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
-import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import { getToken, removeToken } from '@/utils/auth'
 import { isUseProxy, getApiUrl } from '@/utils/env'
 import router from "@/router";
@@ -36,26 +36,30 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    const res = response.data
-    const status = response.status;
+    // 如果响应是二进制流，则直接返回，用于下载文件、Excel 导出等
+    if (response.config.responseType === "blob") {
+      return response;
+    }
+    const { code, data, msg } = response.data
+    const status = response.status
     // 根据自定义错误码判断请求是否成功
-    if (status === 200 && res.code === "00000") {
-      return res
+    if (status === 200 && code === "00000") {
+      return data
     }
     
     // 处理业务错误
     ElMessage({
-      message: res.msg || '系统错误',
+      message: msg || '系统错误',
       type: 'error',
       duration: 5 * 1000
     })
     
     // 未登录或 token 过期
-    if (res.code === "A0230") {
+    if (code === "A0230") {
       handleSessionExpired();
     }
     
-    return Promise.reject(new Error(res.msg || '系统错误'))
+    return Promise.reject(new Error(msg || '系统错误'))
   },
   (error) => {
     console.error('响应错误:', error)

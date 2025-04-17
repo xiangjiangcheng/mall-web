@@ -214,7 +214,7 @@ const dialogForm = ref<FormInstance>()
 const getList = async () => {
   loading.value = true
   try {
-    const { data } = await getUserList(queryParams)
+    const data = await getUserList(queryParams)
     userList.value = data.list
     total.value = data.total
   } catch (error) {
@@ -234,7 +234,7 @@ const getDetail = async(id: number) => {
 // 获取角色列表
 const getRoles = async () => {
   try {
-    const { data } = await getRoleList({ pageNum: 1, pageSize: 100 })
+    const data = await getRoleList({ pageNum: 1, pageSize: 100 })
     roleOptions.value = data.list
   } catch (error) {
     console.error('获取角色列表失败:', error)
@@ -355,7 +355,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .app-container {
-  padding: 20px;
+  padding: 2px;
   
   .search-wrapper {
     margin-bottom: 20px;
