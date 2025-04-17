@@ -14,7 +14,17 @@ Vue3 + Vite + TypeScript + Element-Plus：从零到一构建企业级后台管�
 
 # DOC
 1.unocss查找： https://unocss.dev/interactive/
+2.svg图标： 访问 iconfont 下载所需的 SVG 图标，并将其复制到 src/assets/icons 目录下 https://www.iconfont.cn/
+```sh
+使用方法
+<template>
+  <!-- 默认尺寸 1em，颜色 currentColor ,继承父级的文本颜色 -->
+  <div class="i-svg:home"></div>
 
+  <!-- 自定义颜色和尺寸 -->
+  <div class="i-svg:home text-xl text-blue-500"></div>   
+</template>
+```
 # 项目结构
 
 
@@ -32,6 +42,7 @@ Vue3 + Vite + TypeScript + Element-Plus：从零到一构建企业级后台管�
 7. 整合 Axios
 8. 静态路由 vue-router
 9. 动态路由： 需要用户登录，根据用户拥有的角色进行权限校验后进行初始化
+10. 使用 @unocss/preset-icons 文档：https://youlai.blog.csdn.net/article/details/145499595
 
 ```
 

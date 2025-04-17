@@ -49,7 +49,7 @@ declare module 'vue' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     EnvInfo: typeof import('./../components/EnvInfo.vue')['default']
     HelloWorld: typeof import('./../components/HelloWorld.vue')['default']
-    IconSelect: typeof import('./../components/IconSelect.vue')['default']
+    IconSelect: typeof import('./../components/IconSelect/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TabsView: typeof import('./../components/TabsView/index.vue')['default']

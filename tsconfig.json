@@ -16,7 +16,8 @@
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
      /* Type Checking */
-     "types": ["vue-router"]
+     // 类型声明相关配置
+    "types": ["node", "vite/client", "element-plus/global"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "uno.config.ts"],
   "exclude": ["node_modules"]

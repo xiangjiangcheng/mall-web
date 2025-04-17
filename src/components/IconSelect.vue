@@ -53,7 +53,7 @@ const selectIcon = (icon: string) => {
 </script>
 <script lang="ts">
   export default {
-    name: 'IconSelect'
+    name: 'IconSelect1'
   }
 </script>
 <style scoped>

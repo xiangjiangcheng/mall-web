@@ -17,9 +17,14 @@
         <el-table-column prop="name" label="菜单名称" />
         <el-table-column prop="icon" label="图标" width="80">
           <template #default="scope">
-            <el-icon v-if="scope.row.icon">
-              <component :is="scope.row.icon" />
-            </el-icon>
+            <template v-if="scope.row.icon && scope.row.icon.startsWith('el-icon')">
+              <el-icon style="vertical-align: -0.15em">
+                <component :is="scope.row.icon.replace('el-icon-', '')" />
+              </el-icon>
+            </template>
+            <template v-else-if="scope.row.icon">
+              <div :class="`i-svg:${scope.row.icon}`" />
+            </template>
           </template>
         </el-table-column>
         <el-table-column prop="type" label="类型" width="100">
@@ -131,7 +136,8 @@
         </el-form-item>
         <el-form-item label="菜单图标" prop="icon" v-if="form.type === MenuTypeEnum.CATALOG || form.type === MenuTypeEnum.MENU">
           <!-- 图标选择器 -->
-          <icon-select v-model="form.icon" />
+          <IconSelect v-model="form.icon" />
+          <!-- <icon-select v-model="form.icon" /> -->
         </el-form-item>
         <el-form-item label="显示状态" prop="visible">
           <el-radio-group v-model="form.visible">
@@ -163,7 +169,8 @@ import type { FormInstance } from 'element-plus'
 import { getMenuList, getMenuDetail, addMenu, updateMenu, deleteMenu } from '@/api/menu'
 import type { Menu, MenuForm } from '@/types/api'
 import { MenuTypeEnum } from '@/enums/menu.enum'
-import IconSelect from '@/components/IconSelect.vue'
+ // 导入组件, 默认无需导入，已全局注册
+import IconSelect from '@/components/IconSelect/index.vue'
 import type { DrawerProps } from 'element-plus'
 // 菜单列表数据
 const menuList = ref<Menu[]>([])

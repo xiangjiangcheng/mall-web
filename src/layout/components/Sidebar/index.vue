@@ -20,21 +20,18 @@
       <template v-for="menu in menus" :key="menu.path">
         <!-- 没有子菜单的情况 -->
         <el-menu-item v-if="!menu.children || menu.children.length === 0" :index="resolveFullPath(menu.path, '')">
-          <el-icon v-if="menu.meta?.icon"><component :is="menu.meta.icon" /></el-icon>
-          <span>{{ menu.meta?.title }}</span>
+          <SidebarMenuItemTitle :icon="menu.meta?.icon" :title="menu.meta?.title" />
         </el-menu-item>
         
         <!-- 有子菜单的情况 -->
         <el-sub-menu v-else :index="resolveFullPath(menu.path, '')">
           <template #title>
-            <el-icon v-if="menu.meta?.icon"><component :is="menu.meta.icon" /></el-icon>
-            <span>{{ menu.meta?.title }}</span>
+             <SidebarMenuItemTitle :icon="menu.meta?.icon" :title="menu.meta?.title" />
           </template>
           
           <template v-for="child in menu.children" :key="child.path">
             <el-menu-item :index="resolveFullPath(child.path, menu.path)">
-              <el-icon v-if="child.meta?.icon"><component :is="child.meta.icon" /></el-icon>
-              <span>{{ child.meta?.title }}</span>
+              <SidebarMenuItemTitle :icon="child.meta?.icon" :title="child.meta?.title" />
             </el-menu-item>
           </template>
         </el-sub-menu>
