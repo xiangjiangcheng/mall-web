@@ -10,8 +10,8 @@ const constantRoutes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('@/views/dashboard/index.vue'),
     meta: { 
-      title: '登录',
-      icon: 'Monitor',
+      title: '首页',
+      icon: 'monitor',
       affix: true,
       keepAlive: true
     }

@@ -3,21 +3,21 @@
     <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form">
       <h3 class="title">系统登录</h3>
       <el-form-item prop="username">
-        <el-input v-model="loginForm.username" placeholder="用户名">
+        <el-input v-model="loginForm.username" @keyup.enter="handleLogin" placeholder="用户名">
           <template #prefix>
             <el-icon><User /></el-icon>
           </template>
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input v-model="loginForm.password" type="password" placeholder="密码">
+        <el-input v-model="loginForm.password" type="password" @keyup.enter="handleLogin" placeholder="密码">
           <template #prefix>
             <el-icon><Lock /></el-icon>
           </template>
         </el-input>
       </el-form-item>
       <el-form-item prop="captchaCode">
-        <el-input v-model="loginForm.captchaCode" placeholder="验证码">
+        <el-input v-model="loginForm.captchaCode" @keyup.enter="handleLogin" placeholder="验证码">
           <template #prefix>
             <el-icon><Picture /></el-icon>
           </template>

@@ -114,4 +114,6 @@ export interface MenuForm {
   sort: number
   icon: string
   redirect: string
+  /** 【菜单】是否开启页面缓存 */
+  keepAlive?: number
 } 

@@ -104,7 +104,6 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTabsStore } from '@/stores/tabs'
 import type { TabItem } from '@/types/tabs'
-import { Close, Refresh, FolderDelete, Delete } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -187,11 +186,13 @@ const handleNavigate = (item: TabItem) => {
 
 // 处理右键菜单命令
 const handleCommand = (command: string) => {
+
   if (!currentContextTab.value) return
 
   switch (command) {
     case 'refresh':
       const fullPath = tabsStore.refreshTab(currentContextTab.value)
+      console.log("refresh page:", fullPath)
       router.replace('/redirect' + fullPath)
       break
     case 'close':

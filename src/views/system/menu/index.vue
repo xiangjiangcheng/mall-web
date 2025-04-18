@@ -145,6 +145,12 @@
             <el-radio :value="0">隐藏</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item v-if="form.type === MenuTypeEnum.MENU" label="缓存页面">
+          <el-radio-group v-model="form.keepAlive">
+            <el-radio :value="1">开启</el-radio>
+            <el-radio :value="0">关闭</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model="form.sort" :min="0" />
         </el-form-item>
@@ -194,7 +200,8 @@ const form = reactive<MenuForm>({
   visible: 1,
   sort: 0,
   icon: '',
-  redirect: ''
+  redirect: '',
+  keepAlive: 1
 })
 
 // 表单校验规则
